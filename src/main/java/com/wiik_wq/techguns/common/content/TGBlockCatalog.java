@@ -113,7 +113,6 @@ public final class TGBlockCatalog {
             Map.entry("ammo_press", "ammopress"),
             Map.entry("metal_press", "metalpress"),
             Map.entry("chem_lab", "chemlab"),
-            Map.entry("charging_station", "charging_station"),
             Map.entry("armor_bench", "armor_bench_bottom"),
             Map.entry("turret_base", "turret_base")
     );
@@ -154,7 +153,17 @@ public final class TGBlockCatalog {
             Map.entry("lamp_yellow", "lamp_yellow"),
             Map.entry("lamp_white", "lamp_white"),
             Map.entry("lantern_yellow", "lantern_yellow"),
-            Map.entry("lantern_white", "lantern_white")
+            Map.entry("lantern_white", "lantern_white"),
+            Map.entry("charging_station", "charging_station")
+    );
+
+    public static final Map<String, String> BLOCK_ITEM_DISPLAY_MODEL_TEMPLATES = Map.ofEntries(
+            Map.entry("ammo_press", "basicmachine"),
+            Map.entry("metal_press", "basicmachine"),
+            Map.entry("chem_lab", "basicmachine"),
+            Map.entry("charging_station", "basicmachine"),
+            Map.entry("armor_bench", "basicmachine"),
+            Map.entry("turret_base", "basicmachine")
     );
 
     public static final Map<String, String> STAIRS = Map.ofEntries(

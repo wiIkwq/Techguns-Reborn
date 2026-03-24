@@ -1,0 +1,8 @@
+{
+  "loader": "forge:obj",
+  "model": "techguns:models/block/charging_station.obj",
+  "flip_v": true,
+  "textures": {
+    "particle": "techguns:blocks/charging_station"
+  }
+}

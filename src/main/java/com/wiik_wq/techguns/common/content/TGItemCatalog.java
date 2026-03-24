@@ -2,6 +2,7 @@ package com.wiik_wq.techguns.common.content;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 public final class TGItemCatalog {
 
@@ -368,6 +369,100 @@ public final class TGItemCatalog {
             Map.entry("t4_power_boots", "models/armor/powerarmor_mk2"),
             Map.entry("steelbarrel", "items/ironbarrel")
     );
+
+    public static final Set<String> LEGACY_GUN_RENDER_ITEMS = Set.of(
+            "m4",
+            "ak47",
+            "lmg",
+            "handcannon",
+            "sawedoff",
+            "thompson",
+            "boltaction",
+            "biogun",
+            "flamethrower",
+            "pistol",
+            "rocketlauncher",
+            "minigun",
+            "combatshotgun",
+            "revolver",
+            "grimreaper",
+            "pdw",
+            "as50",
+            "m4_infiltrator",
+            "goldenrevolver",
+            "pulserifle",
+            "teslagun",
+            "netherblaster",
+            "lasergun",
+            "alienblaster",
+            "blasterrifle",
+            "powerhammer",
+            "aug",
+            "sonicshotgun",
+            "chainsaw",
+            "scatterbeamrifle",
+            "nucleardeathray",
+            "scar",
+            "vector",
+            "mac10",
+            "mibgun",
+            "guidedmissilelauncher",
+            "miningdrill",
+            "tfg",
+            "laserpistol",
+            "shishkebap",
+            "stielgranate",
+            "fraggrenade"
+    );
+
+    public static final Set<String> LEGACY_ITEM_RENDER_ITEMS = Set.of(
+            "assaultriflemagazine",
+            "assaultriflemagazineempty",
+            "assaultriflemagazine_incendiary",
+            "lmgmagazine",
+            "lmgmagazineempty",
+            "lmgmagazine_incendiary",
+            "as50magazine",
+            "as50magazineempty",
+            "as50magazine_incendiary",
+            "as50magazine_explosive",
+            "rocket",
+            "rocket_nuke",
+            "rocket_high_velocity",
+            "riot_shield",
+            "ballistic_shield",
+            "advanced_shield"
+    );
+
+    public static final Set<String> ARMOR_PREVIEW_RENDER_ITEMS = Set.of(
+            "steam_helmet",
+            "steam_chestplate",
+            "steam_leggings",
+            "steam_boots",
+            "t3_power_helmet",
+            "t3_power_chestplate",
+            "t3_power_leggings",
+            "t3_power_boots",
+            "t4_power_helmet",
+            "t4_power_chestplate",
+            "t4_power_leggings",
+            "t4_power_boots"
+    );
+
+    public static final Set<String> OBJ_MODEL_ITEMS = Set.of(
+            "gaussrifle",
+            "grenadelauncher"
+    );
+
+    public static boolean usesSpecialItemRenderer(String id) {
+        return LEGACY_GUN_RENDER_ITEMS.contains(id)
+                || LEGACY_ITEM_RENDER_ITEMS.contains(id)
+                || ARMOR_PREVIEW_RENDER_ITEMS.contains(id);
+    }
+
+    public static boolean usesObjItemModel(String id) {
+        return OBJ_MODEL_ITEMS.contains(id);
+    }
 
     private TGItemCatalog() {
     }

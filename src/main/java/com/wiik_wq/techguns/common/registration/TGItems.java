@@ -2,10 +2,13 @@ package com.wiik_wq.techguns.common.registration;
 
 import com.wiik_wq.techguns.TechgunsReborn;
 import com.wiik_wq.techguns.common.content.TGItemCatalog;
+import com.wiik_wq.techguns.common.item.TGArmorItem;
+import com.wiik_wq.techguns.common.item.TGGunItem;
+import com.wiik_wq.techguns.common.item.TGShieldItem;
+import com.wiik_wq.techguns.common.item.TGSpecialRendererItem;
 import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ArmorMaterials;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.SwordItem;
 import net.minecraft.world.item.Tiers;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -35,10 +38,11 @@ public final class TGItems {
     public static final Map<String, ItemEntry> ENTRIES = new LinkedHashMap<>();
 
     static {
-        TGItemCatalog.SIMPLE_ITEMS.forEach(id -> register(id, ItemStyle.GENERATED, () -> new Item(defaultProps())));
-        TGItemCatalog.GUN_ITEMS.forEach(id -> register(id, ItemStyle.GUN, () -> new Item(singleStackProps())));
+        TGItemCatalog.SIMPLE_ITEMS.forEach(id -> register(id, ItemStyle.GENERATED,
+                () -> TGItemCatalog.usesSpecialItemRenderer(id) ? new TGSpecialRendererItem(defaultProps()) : new Item(defaultProps())));
+        TGItemCatalog.GUN_ITEMS.forEach(id -> register(id, ItemStyle.GUN, () -> new TGGunItem(singleStackProps())));
         TGItemCatalog.HANDHELD_ITEMS.forEach(id -> register(id, ItemStyle.HANDHELD, () -> new SwordItem(Tiers.IRON, 3, -2.4F, singleStackProps())));
-        TGItemCatalog.SHIELD_ITEMS.forEach(id -> register(id, ItemStyle.SHIELD, () -> new ShieldItem(singleStackProps().durability(512))));
+        TGItemCatalog.SHIELD_ITEMS.forEach(id -> register(id, ItemStyle.SHIELD, () -> new TGShieldItem(singleStackProps().durability(512))));
         TGItemCatalog.ARMOR_ITEMS.forEach(TGItems::registerArmor);
     }
 
@@ -59,7 +63,7 @@ public final class TGItems {
 
     private static void registerArmor(String id) {
         ArmorItem.Type armorType = armorType(id);
-        register(id, ItemStyle.ARMOR, () -> new ArmorItem(ArmorMaterials.IRON, armorType, singleStackProps()));
+        register(id, ItemStyle.ARMOR, () -> new TGArmorItem(ArmorMaterials.IRON, armorType, singleStackProps()));
     }
 
     private static void register(String id, ItemStyle style, java.util.function.Supplier<Item> supplier) {
