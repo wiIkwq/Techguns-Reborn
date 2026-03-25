@@ -92,6 +92,9 @@ public final class TGSpecialItemRenderRegistry {
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, 0.0F, -0.05F)
     );
+    private static final float GUN_GUI_SCALE_MULTIPLIER = 0.9F;
+    private static final float GUN_GUI_X_OFFSET = 0.5F;
+    private static final float GUN_GUI_Y_OFFSET = 0.5F;
     private static final float[][] DEFAULT_ARMOR_TRANSLATIONS = translations(
             vec(0.0F, 0.1F, 0.0F),
             vec(0.0F, 0.04F, 0.0F),
@@ -323,8 +326,22 @@ public final class TGSpecialItemRenderRegistry {
     private static void registerGun(String id, LegacyMultipartModel model, int parts, ItemRotation rotation, float baseScale, float firstScale,
                                     float thirdScale, float guiScale, float groundScale, float fixedScale, float[] baseTranslation,
                                     ResourceLocation[] textures, float[][] translations) {
-        registerMultipartItem(id, model, parts, rotation, baseScale, firstScale, thirdScale, guiScale, groundScale, fixedScale,
-                baseTranslation, textures, translations, true);
+        registerMultipartItem(
+                id,
+                model,
+                parts,
+                rotation,
+                baseScale,
+                firstScale,
+                thirdScale,
+                guiScale * GUN_GUI_SCALE_MULTIPLIER,
+                groundScale,
+                fixedScale,
+                baseTranslation,
+                textures,
+                withGuiOffset(translations, GUN_GUI_X_OFFSET, GUN_GUI_Y_OFFSET, 0.0F),
+                true
+        );
     }
 
     private static void registerGrenade(String id, LegacyMultipartModel model, int parts, ItemRotation rotation, float baseScale, float firstScale,
@@ -342,11 +359,11 @@ public final class TGSpecialItemRenderRegistry {
                 baseScale,
                 firstScale,
                 thirdScale,
-                guiScale,
+                guiScale * GUN_GUI_SCALE_MULTIPLIER,
                 groundScale,
                 fixedScale,
                 baseTranslation,
-                translations,
+                withGuiOffset(translations, GUN_GUI_X_OFFSET, GUN_GUI_Y_OFFSET, 0.0F),
                 true
         ));
     }
@@ -448,6 +465,17 @@ public final class TGSpecialItemRenderRegistry {
 
     private static float[][] translations(float[] first, float[] third, float[] gui, float[] ground, float[] fixed) {
         return new float[][]{first, third, gui, ground, fixed};
+    }
+
+    private static float[][] withGuiOffset(float[][] translations, float x, float y, float z) {
+        float[][] adjusted = new float[translations.length][];
+        for (int i = 0; i < translations.length; i++) {
+            adjusted[i] = translations[i].clone();
+        }
+        adjusted[2][0] += x;
+        adjusted[2][1] += y;
+        adjusted[2][2] += z;
+        return adjusted;
     }
 
     private static float scale(float factor) {
