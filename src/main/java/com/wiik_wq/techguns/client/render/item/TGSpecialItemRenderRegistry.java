@@ -59,6 +59,10 @@ import com.wiik_wq.techguns.client.render.legacy.model.item.ModelBallisticShield
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelLmgMag;
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRiotShield;
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRocket;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.resources.model.BakedModel;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ArmorItem;
@@ -229,6 +233,12 @@ public final class TGSpecialItemRenderRegistry {
         registerGun("mibgun", new ModelMibGun(), 1, rotation(RotationMode.GUN), 1.2F, 0.5F, 0.35F, 0.75F, 0.35F, 0.5F,
                 vec(0.0F, -0.56F, -0.02F), gunTexture("mibgun"),
                 translations(vec(0.0F, 0.1F, -0.02F), vec(0.0F, -0.04F, -0.01F), vec(0.02F, -0.08F, 0.0F), vec(0.02F, -0.08F, 0.0F), vec(-0.04F, -0.09F, 0.0F)));
+        registerModelBackedGun("gaussrifle", rotation(0.0F, -90.0F, 0.0F), 0.9F, 0.5F, 0.35F, 0.25F, 0.35F, 0.5F,
+                vec(0.6F, 0.0F, scale(0.5F) - 0.09F),
+                translations(vec(0.0F, 0.12F, -0.1F), vec(0.0F, 0.05F, -0.17F), vec(0.0F, 0.06F, 0.06F), vec(0.0F, 0.0F, 0.0F), vec(0.0F, 0.0F, -0.05F)));
+        registerModelBackedGun("grenadelauncher", rotation(0.0F, 90.0F, 0.0F), 0.125F, 1.0F, 0.35F, 0.45F, 0.35F, 0.5F,
+                vec(0.0F, 0.0F, 0.0F),
+                translations(vec(0.0F, 0.19F, -0.09F), vec(0.0F, 0.06F, -0.2F), vec(-0.05F, 0.08F, 0.0F), vec(0.0F, 0.05F, -0.09F), vec(0.11F, 0.01F, -0.05F)));
         registerGun("guidedmissilelauncher", new ModelGuidedMissileLauncher(), 1, rotation(RotationMode.GUN_90), 1.0F, 0.5F, 0.35F, 0.35F, 0.35F, 0.5F,
                 vec(-0.4F, -0.2F, scale(0.5F)), gunTexture("guidedmissilelauncher"),
                 translations(vec(-0.13F, 0.3F, 0.62F), vec(0.0F, 0.09F, 0.28F), vec(0.0F, 0.03F, 0.0F), vec(0.0F, 0.0F, 0.0F), vec(0.0F, 0.0F, -0.04F)));
@@ -321,6 +331,24 @@ public final class TGSpecialItemRenderRegistry {
         registerGun(id, model, parts, rotation, baseScale, firstScale, thirdScale, guiScale, groundScale, fixedScale, baseTranslation, textures, translations);
     }
 
+    private static void registerModelBackedGun(String id, ItemRotation rotation, float baseScale, float firstScale,
+                                               float thirdScale, float guiScale, float groundScale, float fixedScale,
+                                               float[] baseTranslation, float[][] translations) {
+        DEFINITIONS.put(id, new ModelBackedItemDefinition(
+                modelLocation(id),
+                rotation,
+                baseScale,
+                firstScale,
+                thirdScale,
+                guiScale,
+                groundScale,
+                fixedScale,
+                baseTranslation,
+                translations,
+                true
+        ));
+    }
+
     private static void registerMultipartItem(String id, LegacyMultipartModel model, int parts, ItemRotation rotation, float baseScale,
                                               float firstScale, float thirdScale, float guiScale, float groundScale, float fixedScale,
                                               float[] baseTranslation, ResourceLocation[] textures, float[][] translations,
@@ -408,6 +436,10 @@ public final class TGSpecialItemRenderRegistry {
         return ResourceLocation.parse("techguns:textures/armors/" + name + ".png");
     }
 
+    private static ModelResourceLocation modelLocation(String id) {
+        return new ModelResourceLocation(ResourceLocation.fromNamespaceAndPath("techguns", id + "_legacy"), "inventory");
+    }
+
     private static float[] vec(float x, float y, float z) {
         return new float[]{x, y, z};
     }
@@ -463,7 +495,7 @@ public final class TGSpecialItemRenderRegistry {
     }
 
     public interface ItemDefinition {
-        void render(ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay);
+        void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay);
     }
 
     @FunctionalInterface
@@ -484,7 +516,7 @@ public final class TGSpecialItemRenderRegistry {
                                            float[][] translations, boolean applyBuiltinRotations) implements ItemDefinition {
 
         @Override
-        public void render(ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+        public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
             LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
             try {
                 poseStack.pushPose();
@@ -516,7 +548,7 @@ public final class TGSpecialItemRenderRegistry {
                                         boolean applyBuiltinRotations) implements ItemDefinition {
 
         @Override
-        public void render(ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+        public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
             LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
             LegacyModelTexture.set(texture);
             try {
@@ -539,15 +571,47 @@ public final class TGSpecialItemRenderRegistry {
         }
     }
 
+    private record ModelBackedItemDefinition(ModelResourceLocation modelLocation, ItemRotation rotation, float baseScale,
+                                             float firstScale, float thirdScale, float guiScale, float groundScale,
+                                             float fixedScale, float[] baseTranslation, float[][] translations,
+                                             boolean applyBuiltinRotations) implements ItemDefinition {
+
+        @Override
+        public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+            poseStack.pushPose();
+            try {
+                applySharedContextTransforms(poseStack, context, translations);
+                if (applyBuiltinRotations) {
+                    applyBuiltinContextRotations(poseStack, context, false);
+                }
+
+                float scaleFactor = scaleFor(context, baseScale, firstScale, thirdScale, guiScale, groundScale, fixedScale);
+                poseStack.scale(scaleFactor, scaleFactor, scaleFactor);
+                rotation.apply(poseStack, context);
+                poseStack.translate(baseTranslation[0], baseTranslation[1], baseTranslation[2]);
+
+                ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+                BakedModel bakedModel = Minecraft.getInstance().getModelManager().getModel(modelLocation);
+                itemRenderer.render(stack, ItemDisplayContext.NONE, false, poseStack, bufferSource, light, overlay, bakedModel);
+            } finally {
+                poseStack.popPose();
+            }
+        }
+    }
+
     private record ArmorItemDefinition(LegacyBipedModel model, ResourceLocation texture, ArmorItem.Type armorType,
                                        float groundScale) implements ItemDefinition {
 
         @Override
-        public void render(ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+        public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
             LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
             LegacyModelTexture.set(texture);
             try {
                 poseStack.pushPose();
+                // ItemRenderer shifts BEWLR items to block-space origin before calling us.
+                // Old Techguns armor preview renderers worked from an unshifted origin, so
+                // armor items need this compensation to match the legacy slot placement.
+                poseStack.translate(0.5F, 0.5F, 0.5F);
                 applySharedContextTransforms(poseStack, context, DEFAULT_ARMOR_TRANSLATIONS);
                 applyBuiltinContextRotations(poseStack, context, true);
 

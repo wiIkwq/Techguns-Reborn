@@ -2,6 +2,7 @@ package com.wiik_wq.techguns.client.render.legacy.model;
 
 import com.wiik_wq.techguns.client.render.legacy.LegacyRenderContext;
 import com.mojang.blaze3d.vertex.PoseStack;
+import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.model.geom.builders.CubeDeformation;
 import net.minecraft.client.model.geom.builders.CubeListBuilder;
@@ -77,15 +78,41 @@ public class LegacyModelRenderer {
             return;
         }
 
-        PoseStack poseStack = LegacyRenderContext.poseStack();
+        render(
+                LegacyRenderContext.poseStack(),
+                LegacyRenderContext.consumer(LegacyModelTexture.current()),
+                LegacyRenderContext.light(),
+                LegacyRenderContext.overlay(),
+                1.0F,
+                1.0F,
+                1.0F,
+                1.0F
+        );
+    }
+
+    public void render(PoseStack poseStack, VertexConsumer consumer, int light, int overlay,
+                       float red, float green, float blue, float alpha) {
+        if (isHidden || !showModel) {
+            return;
+        }
+
         poseStack.pushPose();
         poseStack.translate(offsetX, offsetY, offsetZ);
 
         ModelPart part = syncPartTree();
-        part.render(poseStack, LegacyRenderContext.consumer(LegacyModelTexture.current()),
-                LegacyRenderContext.light(), LegacyRenderContext.overlay());
+        part.render(poseStack, consumer, light, overlay, red, green, blue, alpha);
 
         poseStack.popPose();
+    }
+
+    public void copyFrom(ModelPart source) {
+        this.rotationPointX = source.x;
+        this.rotationPointY = source.y;
+        this.rotationPointZ = source.z;
+        this.rotateAngleX = source.xRot;
+        this.rotateAngleY = source.yRot;
+        this.rotateAngleZ = source.zRot;
+        this.showModel = source.visible;
     }
 
     private ModelPart syncPartTree() {

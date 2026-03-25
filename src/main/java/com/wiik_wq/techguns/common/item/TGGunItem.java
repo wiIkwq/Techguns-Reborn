@@ -13,6 +13,6 @@ public class TGGunItem extends Item {
 
     @Override
     public void initializeClient(Consumer<IClientItemExtensions> consumer) {
-        consumer.accept(com.wiik_wq.techguns.client.render.item.TGItemRenderExtensions.INSTANCE);
+        consumer.accept(com.wiik_wq.techguns.client.render.item.TGGunItemRenderExtensions.INSTANCE);
     }
 }

@@ -406,6 +406,8 @@ public final class TGItemCatalog {
             "vector",
             "mac10",
             "mibgun",
+            "gaussrifle",
+            "grenadelauncher",
             "guidedmissilelauncher",
             "miningdrill",
             "tfg",
@@ -454,6 +456,10 @@ public final class TGItemCatalog {
             "grenadelauncher"
     );
 
+    public static final Set<String> GUNS_WITHOUT_BOW_ARM_POSE = Set.of(
+            "shishkebap"
+    );
+
     public static boolean usesSpecialItemRenderer(String id) {
         return LEGACY_GUN_RENDER_ITEMS.contains(id)
                 || LEGACY_ITEM_RENDER_ITEMS.contains(id)
@@ -462,6 +468,10 @@ public final class TGItemCatalog {
 
     public static boolean usesObjItemModel(String id) {
         return OBJ_MODEL_ITEMS.contains(id);
+    }
+
+    public static boolean usesBowArmPose(String id) {
+        return GUN_ITEMS.contains(id) && !GUNS_WITHOUT_BOW_ARM_POSE.contains(id);
     }
 
     private TGItemCatalog() {

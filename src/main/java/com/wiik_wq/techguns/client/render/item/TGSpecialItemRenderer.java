@@ -29,6 +29,6 @@ public final class TGSpecialItemRenderer extends BlockEntityWithoutLevelRenderer
             super.renderByItem(stack, context, poseStack, bufferSource, packedLight, packedOverlay);
             return;
         }
-        definition.render(context, poseStack, bufferSource, packedLight, packedOverlay);
+        definition.render(stack, context, poseStack, bufferSource, packedLight, packedOverlay);
     }
 }

@@ -33,6 +33,7 @@ public class TGItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         TGBlocks.all().forEach(entry -> blockItemModel(entry.id()));
         TGItems.all().forEach(entry -> itemModel(entry.id(), entry.style()));
+        TGItemCatalog.OBJ_MODEL_ITEMS.forEach(this::objBackingItemModel);
     }
 
     private void blockItemModel(String id) {
@@ -50,14 +51,14 @@ public class TGItemModelProvider extends ItemModelProvider {
     }
 
     private void itemModel(String id, TGItems.ItemStyle style) {
-        if (TGItemCatalog.usesObjItemModel(id)) {
-            objItemModel(id);
-            return;
-        }
-
         if (TGItemCatalog.usesSpecialItemRenderer(id)) {
             ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile("builtin/entity"));
             applyGeneratedDisplayTransforms(builder);
+            return;
+        }
+
+        if (TGItemCatalog.usesObjItemModel(id)) {
+            objBackingItemModel(id);
             return;
         }
 
@@ -66,24 +67,23 @@ public class TGItemModelProvider extends ItemModelProvider {
         withExistingParent(id, mcLoc(parent)).texture("layer0", texture);
     }
 
-    private void objItemModel(String id) {
+    private void objBackingItemModel(String id) {
+        String modelId = id + "_legacy";
         if ("gaussrifle".equals(id)) {
-            ItemModelBuilder builder = getBuilder(id).texture("particle", modLoc("guns/gaussrifle"));
+            ItemModelBuilder builder = getBuilder(modelId).texture("particle", modLoc("guns/gaussrifle"));
             builder.customLoader(ObjModelBuilder::begin)
                     .modelLocation(modLoc("models/item/gaussrifle.obj"))
                     .flipV(true)
                     .end();
-            applyLegacyObjTransforms(builder);
             return;
         }
 
         if ("grenadelauncher".equals(id)) {
-            ItemModelBuilder builder = getBuilder(id).texture("particle", modLoc("guns/grenadelauncher"));
+            ItemModelBuilder builder = getBuilder(modelId).texture("particle", modLoc("guns/grenadelauncher"));
             CompositeModelBuilder<ItemModelBuilder> composite = builder.customLoader(CompositeModelBuilder::begin);
-            composite.child("body", objChild(id + "_body", "models/item/grenadelauncher.obj"));
-            composite.child("drum", objChild(id + "_drum", "models/item/grenadelauncher_1.obj"));
+            composite.child("body", objChild(modelId + "_body", "models/item/grenadelauncher.obj"));
+            composite.child("drum", objChild(modelId + "_drum", "models/item/grenadelauncher_1.obj"));
             composite.itemRenderOrder("body", "drum").end();
-            applyLegacyObjTransforms(builder);
         }
     }
 
@@ -97,43 +97,17 @@ public class TGItemModelProvider extends ItemModelProvider {
         return builder;
     }
 
-    private void applyLegacyObjTransforms(ItemModelBuilder builder) {
-        builder.transforms()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND).rotation(0.0F, 90.0F, 0.0F).end()
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND).rotation(0.0F, 90.0F, 0.0F).end()
-                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND).rotation(0.0F, 90.0F, 0.0F).end()
-                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND).rotation(0.0F, 90.0F, 0.0F).end()
-                .transform(ItemDisplayContext.GUI).rotation(0.0F, 90.0F, 0.0F).end()
-                .transform(ItemDisplayContext.GROUND).rotation(0.0F, 90.0F, 0.0F).end()
-                .transform(ItemDisplayContext.FIXED).rotation(0.0F, 90.0F, 0.0F).end();
-    }
-
     private void applyGeneratedDisplayTransforms(ItemModelBuilder builder) {
         builder.transforms()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-                .rotation(0.0F, 0.0F, 0.0F)
-                .translation(0.0F, 3.0F, 1.0F)
-                .scale(0.55F, 0.55F, 0.55F)
-                .end()
-                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
-                .rotation(0.0F, 0.0F, 0.0F)
-                .translation(0.0F, 3.0F, 1.0F)
-                .scale(0.55F, 0.55F, 0.55F)
-                .end()
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
                 .rotation(0.0F, -90.0F, 25.0F)
                 .translation(1.13F, 3.2F, 1.13F)
                 .scale(0.68F, 0.68F, 0.68F)
                 .end()
-                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
-                .rotation(0.0F, 90.0F, -25.0F)
-                .translation(1.13F, 3.2F, 1.13F)
-                .scale(0.68F, 0.68F, 0.68F)
-                .end()
-                .transform(ItemDisplayContext.GUI)
-                .rotation(30.0F, 225.0F, 0.0F)
-                .translation(0.0F, 0.0F, 0.0F)
-                .scale(0.625F, 0.625F, 0.625F)
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                .rotation(0.0F, 0.0F, 0.0F)
+                .translation(0.0F, 3.0F, 1.0F)
+                .scale(0.55F, 0.55F, 0.55F)
                 .end()
                 .transform(ItemDisplayContext.GROUND)
                 .rotation(0.0F, 0.0F, 0.0F)
