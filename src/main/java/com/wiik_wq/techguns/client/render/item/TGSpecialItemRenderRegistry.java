@@ -1,5 +1,6 @@
 package com.wiik_wq.techguns.client.render.item;
 
+import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
 import com.wiik_wq.techguns.client.render.legacy.LegacyRenderContext;
@@ -61,6 +62,7 @@ import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRiotShield;
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRocket;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
+import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -549,7 +551,8 @@ public final class TGSpecialItemRenderRegistry {
 
         @Override
         public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
-            LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
+            int renderLight = context == ItemDisplayContext.GUI ? LightTexture.FULL_BRIGHT : light;
+            LegacyRenderContext.begin(poseStack, bufferSource, renderLight, overlay);
             LegacyModelTexture.set(texture);
             try {
                 poseStack.pushPose();
@@ -602,9 +605,13 @@ public final class TGSpecialItemRenderRegistry {
     private record ArmorItemDefinition(LegacyBipedModel model, ResourceLocation texture, ArmorItem.Type armorType,
                                        float groundScale) implements ItemDefinition {
 
+        private static final float GUI_ARMOR_SCALE_MULTIPLIER = 0.72F;
+        private static final float GUI_ARMOR_BRIGHTNESS_MULTIPLIER = 1.1F;
+
         @Override
         public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
-            LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
+            int renderLight = context == ItemDisplayContext.GUI ? LightTexture.FULL_BRIGHT : light;
+            LegacyRenderContext.begin(poseStack, bufferSource, renderLight, overlay);
             LegacyModelTexture.set(texture);
             try {
                 poseStack.pushPose();
@@ -616,11 +623,25 @@ public final class TGSpecialItemRenderRegistry {
                 applyBuiltinContextRotations(poseStack, context, true);
 
                 float scaleFactor = scaleFor(context, 1.0F, 1.0F, 1.0F, 1.5F, groundScale, 1.5F);
+                if (context == ItemDisplayContext.GUI) {
+                    scaleFactor *= guiScaleMultiplier(armorType);
+                }
                 poseStack.scale(scaleFactor, scaleFactor, scaleFactor);
                 poseStack.mulPose(Axis.XP.rotationDegrees(-180.0F));
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
-                poseStack.translate(0.0F, baseYOffset(armorType), 0.0F);
-                model.renderVisibleParts(LEGACY_SCALE);
+                poseStack.translate(0.0F, previewYOffset(context, armorType), 0.0F);
+                if (context == ItemDisplayContext.GUI) {
+                    RenderSystem.setShaderColor(
+                            GUI_ARMOR_BRIGHTNESS_MULTIPLIER,
+                            GUI_ARMOR_BRIGHTNESS_MULTIPLIER,
+                            GUI_ARMOR_BRIGHTNESS_MULTIPLIER,
+                            1.0F
+                    );
+                    model.renderVisibleParts(LEGACY_SCALE);
+                    RenderSystem.setShaderColor(2.0F, 2.0F, 2.0F, 2.0F);
+                } else {
+                    model.renderVisibleParts(LEGACY_SCALE);
+                }
                 poseStack.popPose();
             } finally {
                 LegacyModelTexture.clear();
@@ -634,6 +655,26 @@ public final class TGSpecialItemRenderRegistry {
                 case CHESTPLATE -> -0.9F;
                 case LEGGINGS -> -1.29F;
                 case BOOTS -> -1.42F;
+            };
+        }
+
+        private static float previewYOffset(ItemDisplayContext context, ArmorItem.Type armorType) {
+            if (context == ItemDisplayContext.GUI) {
+                return switch (armorType) {
+                    case BOOTS -> -1.42F;
+                    case LEGGINGS -> -1.05F;
+                    case CHESTPLATE -> -0.35F;
+                    case HELMET ->  0.25F;
+                };
+            }
+            return baseYOffset(armorType);
+        }
+
+        private static float guiScaleMultiplier(ArmorItem.Type armorType) {
+            return switch (armorType) {
+                case LEGGINGS -> GUI_ARMOR_SCALE_MULTIPLIER * 0.7F;
+                case CHESTPLATE -> GUI_ARMOR_SCALE_MULTIPLIER * 0.67F;
+                case HELMET, BOOTS -> GUI_ARMOR_SCALE_MULTIPLIER;
             };
         }
     }
