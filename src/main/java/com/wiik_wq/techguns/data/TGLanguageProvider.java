@@ -148,7 +148,11 @@ public class TGLanguageProvider extends LanguageProvider {
 
     private Map<String, String> loadLegacyTranslations() {
         Map<String, String> result = new HashMap<>();
-        Path file = TGDataPaths.resolve("techguns_old", "src", "main", "resources", "assets", "techguns", "lang", locale + ".lang");
+        if (!TGDataPaths.hasLegacySource()) {
+            return result;
+        }
+
+        Path file = TGDataPaths.resolveLegacy("src", "main", "resources", "assets", "techguns", "lang", locale + ".lang");
         if (!Files.exists(file)) {
             return result;
         }

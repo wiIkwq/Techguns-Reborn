@@ -23,12 +23,22 @@ import java.util.Map;
 
 public class TGItemModelProvider extends ItemModelProvider {
 
-    private static final Path LEGACY_ITEM_MODELS = TGDataPaths.resolve("techguns_old", "src", "main", "resources", "assets", "techguns", "models", "item");
+    private static final Path LEGACY_ITEM_MODELS = TGDataPaths.resolveLegacy("src", "main", "resources", "assets", "techguns", "models", "item");
     private static final Path MAIN_ASSETS = TGDataPaths.resolve("src", "main", "resources", "assets");
     private static final DisplayTransform DEFAULT_FIRST_PERSON_TRANSFORM =
             new DisplayTransform(5.0F, 10F, 5F, 10F, 9F, 3F, 1.0F, 1.0F, 1.0F);
     private static final Map<String, DisplayTransform> FIRST_PERSON_OVERRIDES = Map.of(
             "flamethrower", new DisplayTransform(5.0F, 10F, 5F, 10F, 9F, 3F, 1.0F, 1.0F, 1.0F)
+    );
+    private static final DisplayTransform LADDER_GUI_TRANSFORM =
+            new DisplayTransform(30.0F, 225.0F, 0.0F, -1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F);
+    private static final Map<String, DisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
+            "metal_ladder", LADDER_GUI_TRANSFORM,
+            "shiny_metal_ladder", LADDER_GUI_TRANSFORM,
+            "rusty_metal_ladder", LADDER_GUI_TRANSFORM,
+            "carbon_ladder", LADDER_GUI_TRANSFORM,
+            "slimyladder", LADDER_GUI_TRANSFORM,
+            "charging_station", new DisplayTransform(30.0F, 45.0F, 0.0F, 1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F)
     );
 
     public TGItemModelProvider(net.minecraft.data.PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -48,12 +58,14 @@ public class TGItemModelProvider extends ItemModelProvider {
         if (itemTexture != null) {
             builder = withExistingParent(id, mcLoc("item/generated")).texture("layer0", modLoc("items/" + itemTexture));
             applyLegacyBlockItemDisplayTransforms(builder, id);
+            applyBlockItemGuiOverride(builder, id);
             return;
         }
 
         String parent = blockItemParent(id);
         builder = withExistingParent(id, modLoc("block/" + parent));
         applyLegacyBlockItemDisplayTransforms(builder, id);
+        applyBlockItemGuiOverride(builder, id);
     }
 
     private void itemModel(String id, TGItems.ItemStyle style) {
@@ -104,6 +116,11 @@ public class TGItemModelProvider extends ItemModelProvider {
     }
 
     private void applyGeneratedDisplayTransforms(ItemModelBuilder builder, String id) {
+        if (TGItemCatalog.SHIELD_ITEMS.contains(id)) {
+            applyShieldDisplayTransforms(builder);
+            return;
+        }
+
         DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
         builder.transforms()
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
@@ -133,6 +150,45 @@ public class TGItemModelProvider extends ItemModelProvider {
                 .end();
     }
 
+    private void applyShieldDisplayTransforms(ItemModelBuilder builder) {
+        builder.transforms()
+                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
+                .rotation(0.0F, 90.0F, 0.0F)
+                .translation(10.0F, 6.0F, -4.0F)
+                .scale(1.0F, 1.0F, 1.0F)
+                .end()
+                .transform(ItemDisplayContext.THIRD_PERSON_LEFT_HAND)
+                .rotation(0.0F, 90.0F, 0.0F)
+                .translation(10.0F, 6.0F, 12.0F)
+                .scale(1.0F, 1.0F, 1.0F)
+                .end()
+                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
+                .rotation(0.0F, 180.0F, 5.0F)
+                .translation(-10.0F, 2.0F, -10.0F)
+                .scale(1.25F, 1.25F, 1.25F)
+                .end()
+                .transform(ItemDisplayContext.FIRST_PERSON_LEFT_HAND)
+                .rotation(0.0F, 180.0F, 5.0F)
+                .translation(10.0F, 0.0F, -10.0F)
+                .scale(1.25F, 1.25F, 1.25F)
+                .end()
+                .transform(ItemDisplayContext.GUI)
+                .rotation(15.0F, -25.0F, -5.0F)
+                .translation(2.0F, 3.0F, 0.0F)
+                .scale(0.65F, 0.65F, 0.65F)
+                .end()
+                .transform(ItemDisplayContext.FIXED)
+                .rotation(0.0F, 180.0F, 0.0F)
+                .translation(-4.5F, 4.5F, -5.0F)
+                .scale(0.55F, 0.55F, 0.55F)
+                .end()
+                .transform(ItemDisplayContext.GROUND)
+                .rotation(0.0F, 0.0F, 0.0F)
+                .translation(2.0F, 4.0F, 2.0F)
+                .scale(0.25F, 0.25F, 0.25F)
+                .end();
+    }
+
     private void applyLegacyBlockItemDisplayTransforms(ItemModelBuilder builder, String id) {
         Path modelPath = legacyBlockItemDisplayModel(id);
         if (modelPath == null) {
@@ -141,7 +197,19 @@ public class TGItemModelProvider extends ItemModelProvider {
         applyDisplayTransforms(builder, modelPath);
     }
 
+    private void applyBlockItemGuiOverride(ItemModelBuilder builder, String id) {
+        DisplayTransform transform = BLOCK_ITEM_GUI_OVERRIDES.get(id);
+        if (transform == null) {
+            return;
+        }
+        applyTransform(builder, ItemDisplayContext.GUI, transform);
+    }
+
     private Path legacyBlockItemDisplayModel(String id) {
+        if (!TGDataPaths.hasLegacySource()) {
+            return null;
+        }
+
         Path directPath = LEGACY_ITEM_MODELS.resolve(id + ".json");
         if (Files.exists(directPath)) {
             return directPath;
@@ -175,15 +243,23 @@ public class TGItemModelProvider extends ItemModelProvider {
                 float[] translation = readVec3(transformJson, "translation", 0.0F, 0.0F, 0.0F);
                 float[] scale = readScale(transformJson);
 
-                builder.transforms()
-                        .transform(context)
-                        .rotation(rotation[0], rotation[1], rotation[2])
-                        .translation(translation[0], translation[1], translation[2])
-                        .scale(scale[0], scale[1], scale[2])
-                        .end();
+                applyTransform(builder, context, new DisplayTransform(
+                        rotation[0], rotation[1], rotation[2],
+                        translation[0], translation[1], translation[2],
+                        scale[0], scale[1], scale[2]
+                ));
             }
         } catch (IOException ignored) {
         }
+    }
+
+    private void applyTransform(ItemModelBuilder builder, ItemDisplayContext context, DisplayTransform transform) {
+        builder.transforms()
+                .transform(context)
+                .rotation(transform.rotationX(), transform.rotationY(), transform.rotationZ())
+                .translation(transform.translationX(), transform.translationY(), transform.translationZ())
+                .scale(transform.scaleX(), transform.scaleY(), transform.scaleZ())
+                .end();
     }
 
     private ItemDisplayContext displayContext(String name) {
@@ -273,6 +349,10 @@ public class TGItemModelProvider extends ItemModelProvider {
     }
 
     private ResourceLocation readLegacyTexture(String id) {
+        if (!TGDataPaths.hasLegacySource()) {
+            return null;
+        }
+
         Path modelPath = LEGACY_ITEM_MODELS.resolve(id + ".json");
         if (!Files.exists(modelPath)) {
             return null;

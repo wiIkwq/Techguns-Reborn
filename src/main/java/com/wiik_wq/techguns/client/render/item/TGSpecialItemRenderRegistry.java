@@ -105,28 +105,28 @@ public final class TGSpecialItemRenderRegistry {
     private static final float[][] M4_MAG_TRANSLATIONS = translations(
             vec(0.0F, 0.25F, 0.0F),
             vec(0.0F, 0.25F, 0.05F),
-            vec(0.1F, 0.25F, 0.0F),
+            vec(0.14F, 0.33F, 0.0F),
             vec(0.0F, -0.1F, 0.0F),
             vec(0.0F, 0.0F, -0.05F)
     );
     private static final float[][] AS50_MAG_TRANSLATIONS = translations(
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, 0.0F, 0.0F),
-            vec(0.0F, 0.05F, 0.0F),
+            vec(0.08F, 0.13F, 0.0F),
             vec(0.0F, -0.1F, 0.0F),
             vec(0.0F, 0.0F, 0.0F)
     );
     private static final float[][] LMG_MAG_TRANSLATIONS = translations(
             vec(0.0F, 0.35F, 0.0F),
             vec(0.0F, 0.15F, 0.0F),
-            vec(0.1F, 0.25F, 0.0F),
+            vec(0.14F, 0.33F, 0.0F),
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, 0.25F, -0.05F)
     );
     private static final float[][] ROCKET_TRANSLATIONS = translations(
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, -0.1F, 0.02F),
-            vec(0.0F, 0.0F, 0.0F),
+            vec(0.08F, 0.1F, 0.0F),
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, 0.0F, 0.0F)
     );
@@ -266,37 +266,34 @@ public final class TGSpecialItemRenderRegistry {
                 vec(-0.02F, 0.65F, -scale(1.0F) + 0.02F), gunTexture("frag_grenade_texture"),
                 translations(vec(0.0F, -0.06F, 0.0F), vec(0.0F, -0.11F, -0.01F), vec(-0.05F, -0.49F, 0.0F), vec(0.0F, 0.0F, 0.0F), vec(0.0F, 0.0F, -0.05F)));
         registerMultipartItem("assaultriflemagazine", new ModelARMagazine(false), 1, rotation(-180.0F, 180.0F, 0.0F), 1.25F, 0.5F, 0.35F, 0.85F, 0.5F, 0.5F,
-                vec(0.0F, -0.2F, 0.0F), gunTexture("ar_mag"), M4_MAG_TRANSLATIONS, true);
+                vec(0.0F, -0.2F, 0.0F), gunTexture("ar_mag"), M4_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("assaultriflemagazineempty", new ModelARMagazine(true), 1, rotation(-180.0F, 180.0F, 0.0F), 1.25F, 0.5F, 0.35F, 0.85F, 0.5F, 0.5F,
-                vec(0.0F, -0.2F, 0.0F), gunTexture("ar_mag"), M4_MAG_TRANSLATIONS, true);
+                vec(0.0F, -0.2F, 0.0F), gunTexture("ar_mag"), M4_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("assaultriflemagazine_incendiary", new ModelARMagazine(false), 1, rotation(-180.0F, 180.0F, 0.0F), 1.25F, 0.5F, 0.35F, 0.85F, 0.5F, 0.5F,
-                vec(0.0F, -0.2F, 0.0F), gunTexture("ar_mag_inc"), M4_MAG_TRANSLATIONS, true);
+                vec(0.0F, -0.2F, 0.0F), gunTexture("ar_mag_inc"), M4_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("lmgmagazine", new ModelLmgMag(false), 1, lmgMagazineRotation(), 1.25F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0F, 0.0F, 0.2F), gunTexture("lmg_mag"), LMG_MAG_TRANSLATIONS, true);
+                vec(0.0F, 0.0F, 0.2F), gunTexture("lmg_mag"), LMG_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("lmgmagazineempty", new ModelLmgMag(true), 1, lmgMagazineRotation(), 1.25F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0F, 0.0F, 0.2F), gunTexture("lmg_mag"), LMG_MAG_TRANSLATIONS, true);
+                vec(0.0F, 0.0F, 0.2F), gunTexture("lmg_mag"), LMG_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("lmgmagazine_incendiary", new ModelLmgMag(false), 1, lmgMagazineRotation(), 1.25F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0F, 0.0F, 0.2F), gunTexture("lmg_mag_inc"), LMG_MAG_TRANSLATIONS, true);
+                vec(0.0F, 0.0F, 0.2F), gunTexture("lmg_mag_inc"), LMG_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("as50magazine", new ModelAS50Mag(false), 1, rotation(-180.0F, 180.0F, 0.0F), 1.5F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag"), AS50_MAG_TRANSLATIONS, true);
+                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag"), AS50_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("as50magazineempty", new ModelAS50Mag(true), 1, rotation(-180.0F, 180.0F, 0.0F), 1.5F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag"), AS50_MAG_TRANSLATIONS, true);
+                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag"), AS50_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("as50magazine_incendiary", new ModelAS50Mag(false), 1, rotation(-180.0F, 180.0F, 0.0F), 1.5F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag_inc"), AS50_MAG_TRANSLATIONS, true);
+                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag_inc"), AS50_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("as50magazine_explosive", new ModelAS50Mag(false), 1, rotation(-180.0F, 180.0F, 0.0F), 1.5F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
-                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag_exp"), AS50_MAG_TRANSLATIONS, true);
+                vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag_exp"), AS50_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("rocket", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.5F, 0.5F, 0.5F,
-                vec(0.0F, 0.0F, 0.1F), gunTexture("rocket"), ROCKET_TRANSLATIONS, true);
+                vec(0.0F, 0.0F, 0.1F), gunTexture("rocket"), ROCKET_TRANSLATIONS, true, true);
         registerMultipartItem("rocket_nuke", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.5F, 0.5F, 0.5F,
-                vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_nuke"), ROCKET_TRANSLATIONS, true);
+                vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_nuke"), ROCKET_TRANSLATIONS, true, true);
         registerMultipartItem("rocket_high_velocity", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.5F, 0.5F, 0.5F,
-                vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_hv"), ROCKET_TRANSLATIONS, true);
-        registerSimpleItem("riot_shield", new ModelRiotShield(), rotation(-180.0F, 0.0F, 0.0F), 1.0F, 1.0F, 0.8F, 1.0F, 0.8F, 1.0F,
-                vec(0.0F, 0.0F, 0.0F), armorItemTexture("riot_shield"), DEFAULT_ITEM_TRANSLATIONS, false);
-        registerSimpleItem("ballistic_shield", new ModelBallisticShield(), rotation(-180.0F, 0.0F, 0.0F), 1.0F, 1.0F, 0.8F, 1.0F, 0.8F, 1.0F,
-                vec(0.0F, 0.0F, 0.0F), armorItemTexture("ballistic_shield"), DEFAULT_ITEM_TRANSLATIONS, false);
-        registerSimpleItem("advanced_shield", new ModelAdvancedShield(), rotation(-180.0F, 0.0F, 0.0F), 1.0F, 1.0F, 0.8F, 1.0F, 0.8F, 1.0F,
-                vec(0.0F, 0.0F, 0.0F), armorItemTexture("advanced_shield_silver"), DEFAULT_ITEM_TRANSLATIONS, false);
+                vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_hv"), ROCKET_TRANSLATIONS, true, true);
+        registerShield("riot_shield", new ModelRiotShield(), armorItemTexture("riot_shield"));
+        registerShield("ballistic_shield", new ModelBallisticShield(), armorItemTexture("ballistic_shield"));
+        registerShield("advanced_shield", new ModelAdvancedShield(), armorItemTexture("advanced_shield_silver"));
 
         registerArmor("steam_helmet", armor(new ModelSteamArmor(0), ArmorItem.Type.HELMET), armorTexture("steam_armor"), ArmorItem.Type.HELMET);
         registerArmor("steam_chestplate", armor(new ModelSteamArmor(0), ArmorItem.Type.CHESTPLATE), armorTexture("steam_armor"), ArmorItem.Type.CHESTPLATE);
@@ -372,8 +369,16 @@ public final class TGSpecialItemRenderRegistry {
                                               float firstScale, float thirdScale, float guiScale, float groundScale, float fixedScale,
                                               float[] baseTranslation, ResourceLocation[] textures, float[][] translations,
                                               boolean applyBuiltinRotations) {
+        registerMultipartItem(id, model, parts, rotation, baseScale, firstScale, thirdScale, guiScale, groundScale, fixedScale,
+                baseTranslation, textures, translations, applyBuiltinRotations, false);
+    }
+
+    private static void registerMultipartItem(String id, LegacyMultipartModel model, int parts, ItemRotation rotation, float baseScale,
+                                              float firstScale, float thirdScale, float guiScale, float groundScale, float fixedScale,
+                                              float[] baseTranslation, ResourceLocation[] textures, float[][] translations,
+                                              boolean applyBuiltinRotations, boolean compensateGuiOrigin) {
         DEFINITIONS.put(id, new MultipartItemDefinition(model, parts, rotation, baseScale, firstScale, thirdScale, guiScale, groundScale,
-                fixedScale, baseTranslation, textures, translations, applyBuiltinRotations));
+                fixedScale, baseTranslation, textures, translations, applyBuiltinRotations, compensateGuiOrigin));
     }
 
     private static void registerSimpleItem(String id, LegacySimpleModel model, ItemRotation rotation, float baseScale,
@@ -387,6 +392,10 @@ public final class TGSpecialItemRenderRegistry {
     private static void registerArmor(String id, LegacyBipedModel model, ResourceLocation texture, ArmorItem.Type armorType) {
         float groundScale = armorType == ArmorItem.Type.HELMET ? 1.25F : 1.5F;
         DEFINITIONS.put(id, new ArmorItemDefinition(model, texture, armorType, groundScale));
+    }
+
+    private static void registerShield(String id, LegacySimpleModel model, ResourceLocation texture) {
+        DEFINITIONS.put(id, new ShieldItemDefinition(model, texture));
     }
 
     private static LegacyBipedModel armor(LegacyBipedModel model, ArmorItem.Type armorType) {
@@ -543,13 +552,17 @@ public final class TGSpecialItemRenderRegistry {
     private record MultipartItemDefinition(LegacyMultipartModel model, int parts, ItemRotation rotation, float baseScale,
                                            float firstScale, float thirdScale, float guiScale, float groundScale,
                                            float fixedScale, float[] baseTranslation, ResourceLocation[] textures,
-                                           float[][] translations, boolean applyBuiltinRotations) implements ItemDefinition {
+                                           float[][] translations, boolean applyBuiltinRotations,
+                                           boolean compensateGuiOrigin) implements ItemDefinition {
 
         @Override
         public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
             LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
             try {
                 poseStack.pushPose();
+                if (context == ItemDisplayContext.GUI && compensateGuiOrigin) {
+                    poseStack.translate(0.5F, 0.5F, 0.5F);
+                }
                 applySharedContextTransforms(poseStack, context, translations);
                 if (applyBuiltinRotations) {
                     applyBuiltinContextRotations(poseStack, context, false);
@@ -564,6 +577,26 @@ public final class TGSpecialItemRenderRegistry {
                     LegacyModelTexture.set(textures[Math.min(part, textures.length - 1)]);
                     model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, LEGACY_SCALE, 100, 0.0F, context, part, 0.0F, 0.0F);
                 }
+                poseStack.popPose();
+            } finally {
+                LegacyModelTexture.clear();
+                LegacyRenderContext.end();
+            }
+        }
+    }
+
+    private record ShieldItemDefinition(LegacySimpleModel model, ResourceLocation texture) implements ItemDefinition {
+
+        @Override
+        public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+            int renderLight = context == ItemDisplayContext.GUI ? LightTexture.FULL_BRIGHT : light;
+            LegacyRenderContext.begin(poseStack, bufferSource, renderLight, overlay);
+            LegacyModelTexture.set(texture);
+            try {
+                poseStack.pushPose();
+                poseStack.translate(0.5F, 0.5F, 0.5F);
+                poseStack.mulPose(Axis.XP.rotationDegrees(180.0F));
+                model.render(LEGACY_SCALE);
                 poseStack.popPose();
             } finally {
                 LegacyModelTexture.clear();
