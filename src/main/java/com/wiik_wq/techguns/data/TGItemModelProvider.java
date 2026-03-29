@@ -47,7 +47,7 @@ public class TGItemModelProvider extends ItemModelProvider {
             "rusty_metal_ladder", LADDER_GUI_TRANSFORM,
             "carbon_ladder", LADDER_GUI_TRANSFORM,
             "slimyladder", LADDER_GUI_TRANSFORM,
-            "charging_station", new DisplayTransform(30.0F, 45.0F, 0.0F, 2.0F, 2.0F, 0.0F, 0.625F, 0.625F, 0.625F)
+            "charging_station", new DisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F)
     );
     private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
             "ammo_press",
