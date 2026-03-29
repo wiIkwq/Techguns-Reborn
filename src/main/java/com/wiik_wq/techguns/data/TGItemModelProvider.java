@@ -19,11 +19,17 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Map;
 
 public class TGItemModelProvider extends ItemModelProvider {
 
     private static final Path LEGACY_ITEM_MODELS = TGDataPaths.resolve("techguns_old", "src", "main", "resources", "assets", "techguns", "models", "item");
     private static final Path MAIN_ASSETS = TGDataPaths.resolve("src", "main", "resources", "assets");
+    private static final DisplayTransform DEFAULT_FIRST_PERSON_TRANSFORM =
+            new DisplayTransform(5.0F, 10F, 5F, 10F, 9F, 3F, 1.0F, 1.0F, 1.0F);
+    private static final Map<String, DisplayTransform> FIRST_PERSON_OVERRIDES = Map.of(
+            "flamethrower", new DisplayTransform(5.0F, 10F, 5F, 10F, 9F, 3F, 1.0F, 1.0F, 1.0F)
+    );
 
     public TGItemModelProvider(net.minecraft.data.PackOutput output, ExistingFileHelper existingFileHelper) {
         super(output, TechgunsReborn.MODID, existingFileHelper);
@@ -53,7 +59,7 @@ public class TGItemModelProvider extends ItemModelProvider {
     private void itemModel(String id, TGItems.ItemStyle style) {
         if (TGItemCatalog.usesSpecialItemRenderer(id)) {
             ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile("builtin/entity"));
-            applyGeneratedDisplayTransforms(builder);
+            applyGeneratedDisplayTransforms(builder, id);
             return;
         }
 
@@ -97,12 +103,13 @@ public class TGItemModelProvider extends ItemModelProvider {
         return builder;
     }
 
-    private void applyGeneratedDisplayTransforms(ItemModelBuilder builder) {
+    private void applyGeneratedDisplayTransforms(ItemModelBuilder builder, String id) {
+        DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
         builder.transforms()
                 .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-                .rotation(0.0F, -90.0F, 25.0F)
-                .translation(1.13F, 3.2F, 1.13F)
-                .scale(0.68F, 0.68F, 0.68F)
+                .rotation(firstPerson.rotationX(), firstPerson.rotationY(), firstPerson.rotationZ())
+                .translation(firstPerson.translationX(), firstPerson.translationY(), firstPerson.translationZ())
+                .scale(firstPerson.scaleX(), firstPerson.scaleY(), firstPerson.scaleZ())
                 .end()
                 .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
                 .rotation(0.0F, 0.0F, 0.0F)
@@ -218,6 +225,11 @@ public class TGItemModelProvider extends ItemModelProvider {
 
     private float[] readScale(JsonObject json) {
         return readVec3(json, "scale", 1.0F, 1.0F, 1.0F);
+    }
+
+    private record DisplayTransform(float rotationX, float rotationY, float rotationZ,
+                                    float translationX, float translationY, float translationZ,
+                                    float scaleX, float scaleY, float scaleZ) {
     }
 
     private ResourceLocation textureForItem(String id) {
