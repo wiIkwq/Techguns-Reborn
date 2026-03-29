@@ -6,11 +6,6 @@ name = "Techguns Reborn"
 script = ""
 
 [[actions]]
-name = "Запустить"
-icon = "run"
-command = "runClient"
-
-[[actions]]
 name = "runClient"
 icon = "run"
 command = "gradle runClient"

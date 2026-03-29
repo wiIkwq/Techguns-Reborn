@@ -1,6 +1,7 @@
 package com.wiik_wq.techguns.client.render.armor;
 
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelArmorCoat;
+import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelExoSuit;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelSteamArmor;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelT3PowerArmor;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelT4PowerArmorMk2;
@@ -54,6 +55,12 @@ public final class TGArmorRenderRegistry {
             new TGLegacyArmorModel(new ModelArmorCoat(2, 0.49F)),
             new TGLegacyArmorModel(new ModelArmorCoat(3, 0.75F))
     );
+    private static final SpecialArmorDefinition T3_EXO_SPECIAL = new SpecialArmorDefinition(
+            new TGLegacyArmorModel(new ModelExoSuit(0, 1.0F)),
+            new TGLegacyArmorModel(new ModelExoSuit(2, 0.75F)),
+            new TGLegacyArmorModel(new ModelExoSuit(1, 0.5F)),
+            new TGLegacyArmorModel(new ModelExoSuit(2, 0.75F))
+    );
 
     private TGArmorRenderRegistry() {
     }
@@ -92,6 +99,9 @@ public final class TGArmorRenderRegistry {
         }
         if (itemId.startsWith("t2_riot_")) {
             return T2_RIOT_SPECIAL;
+        }
+        if (itemId.startsWith("t3_exo_")) {
+            return T3_EXO_SPECIAL;
         }
         if (itemId.startsWith("t4_power_")) {
             return T4_POWER_SPECIAL;

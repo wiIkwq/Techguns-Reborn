@@ -9,6 +9,7 @@ import com.wiik_wq.techguns.client.render.legacy.model.LegacyModelTexture;
 import com.wiik_wq.techguns.client.render.legacy.model.LegacyMultipartModel;
 import com.wiik_wq.techguns.client.render.legacy.model.LegacySimpleModel;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelSteamArmor;
+import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelExoSuit;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelT3PowerArmor;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelT4PowerArmorMk2;
 import com.wiik_wq.techguns.client.render.legacy.model.gun.ModelAK;
@@ -309,6 +310,10 @@ public final class TGSpecialItemRenderRegistry {
         registerArmor("t3_power_chestplate", armor(new ModelT3PowerArmor(0), ArmorItem.Type.CHESTPLATE), armorTexture("powerarmor"), ArmorItem.Type.CHESTPLATE);
         registerArmor("t3_power_leggings", armor(new ModelT3PowerArmor(1), ArmorItem.Type.LEGGINGS), armorTexture("powerarmor"), ArmorItem.Type.LEGGINGS);
         registerArmor("t3_power_boots", armor(new ModelT3PowerArmor(0), ArmorItem.Type.BOOTS), armorTexture("powerarmor"), ArmorItem.Type.BOOTS);
+        registerArmor("t3_exo_helmet", armor(new ModelExoSuit(0, 1.0F), ArmorItem.Type.HELMET), armorTexture("t3_exo_layer_1"), ArmorItem.Type.HELMET);
+        registerArmor("t3_exo_chestplate", armor(new ModelExoSuit(2, 0.75F), ArmorItem.Type.CHESTPLATE), armorTexture("t3_exo_layer_1"), ArmorItem.Type.CHESTPLATE);
+        registerArmor("t3_exo_leggings", armor(new ModelExoSuit(1, 0.5F), ArmorItem.Type.LEGGINGS), armorTexture("t3_exo_layer_2"), ArmorItem.Type.LEGGINGS);
+        registerArmor("t3_exo_boots", armor(new ModelExoSuit(2, 0.75F), ArmorItem.Type.BOOTS), armorTexture("t3_exo_layer_1"), ArmorItem.Type.BOOTS);
         registerArmor("t4_power_helmet", armor(new ModelT4PowerArmorMk2(0), ArmorItem.Type.HELMET), armorTexture("powerarmor_mk2_darkgrey"), ArmorItem.Type.HELMET);
         registerArmor("t4_power_chestplate", armor(new ModelT4PowerArmorMk2(0), ArmorItem.Type.CHESTPLATE), armorTexture("powerarmor_mk2_darkgrey"), ArmorItem.Type.CHESTPLATE);
         registerArmor("t4_power_leggings", armor(new ModelT4PowerArmorMk2(1), ArmorItem.Type.LEGGINGS), armorTexture("powerarmor_mk2_darkgrey"), ArmorItem.Type.LEGGINGS);
