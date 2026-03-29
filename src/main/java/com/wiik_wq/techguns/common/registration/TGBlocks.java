@@ -40,11 +40,6 @@ public final class TGBlocks {
             "chem_lab",
             "turret_base"
     );
-    private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
-            "ammo_press",
-            "chem_lab",
-            "turret_base"
-    );
 
     static {
         TGBlockCatalog.CUBE_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
@@ -84,7 +79,7 @@ public final class TGBlocks {
     private static void register(String id, java.util.function.Supplier<Block> supplier) {
         RegistryObject<Block> block = BLOCKS.register(id, supplier);
         RegistryObject<Item> item = BLOCK_ITEMS.register(id, () ->
-                SPECIAL_RENDER_BLOCK_ITEMS.contains(id)
+                SPECIAL_MACHINE_BLOCKS.contains(id)
                         ? new TGSpecialRendererBlockItem(block.get(), new Item.Properties())
                         : new BlockItem(block.get(), new Item.Properties()));
         ENTRIES.put(id, new BlockEntry(id, block, item));

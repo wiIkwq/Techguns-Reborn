@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.0-alpha.2
+
+Second public alpha update for Minecraft 1.20.1.
+
+Highlights:
+- stabilized the data-generation pipeline and fixed the `gaussrifle_legacy` datagen failure
+- restored and corrected multiple legacy custom-render paths for armor, magazines, rockets, shields, and model-backed weapons
+- improved GUI presentation for armor previews, ladders, charging station, shields, magazines, and rockets
+- restored inventory and placed-world visual rendering for `ammo_press`, `chem_lab`, and `turret_base`
+- fixed legacy UV behavior for migrated 3D Techguns models by matching old `ModelBox` texture mapping more closely
+- cleaned up the recent machine rendering implementation and removed temporary debug instrumentation
+
+Known limitations:
+- this release is still focused on visual and structural parity rather than full gameplay restoration
+- held weapon transforms still need a broader consistency pass across the entire gun roster
+- several complex world blocks still need additional visual verification
+- projectiles, gun logic, machine logic, and advanced interactions are still incomplete
+
 ## 0.1.0-alpha.1
 
 Initial public alpha baseline for Minecraft 1.20.1.

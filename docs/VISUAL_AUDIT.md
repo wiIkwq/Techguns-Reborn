@@ -66,12 +66,13 @@ Recommended next batch:
 
 ### 4. Block Items
 
-Status: `partially stabilized`
+Status: `mostly stabilized`
 
 What is already in place:
 - first registration pass for migrated block-items is complete
 - several machine/block-item templates are already generated
 - charging station has already received a dedicated model-path correction
+- machine block-items now have dedicated special render paths instead of incorrect cube fallback
 
 Open work:
 - verify all generated block-item display models in GUI
@@ -86,13 +87,14 @@ Recommended next batch:
 
 ### 5. World Blocks
 
-Status: `needs structured pass`
+Status: `in progress`
 
 Open work:
 - verify cutout blocks in-world
 - verify lighting and emissive presentation
 - verify directional and horizontal special models
 - verify complex blocks that previously relied on more custom behavior
+- continue the placed-machine visual pass beyond the currently restored batch
 
 Recommended next batch:
 - doors
