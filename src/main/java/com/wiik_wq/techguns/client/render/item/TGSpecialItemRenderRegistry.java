@@ -60,6 +60,9 @@ import com.wiik_wq.techguns.client.render.legacy.model.item.ModelBallisticShield
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelLmgMag;
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRiotShield;
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRocket;
+import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelAmmoPress;
+import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelChemLab;
+import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelTurretBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -294,6 +297,9 @@ public final class TGSpecialItemRenderRegistry {
         registerShield("riot_shield", new ModelRiotShield(), armorItemTexture("riot_shield"));
         registerShield("ballistic_shield", new ModelBallisticShield(), armorItemTexture("ballistic_shield"));
         registerShield("advanced_shield", new ModelAdvancedShield(), armorItemTexture("advanced_shield_silver"));
+        registerMachineBlockItem("ammo_press", new ModelAmmoPress(), blockTexture("ammopress"));
+        registerMachineBlockItem("chem_lab", new ModelChemLab(), blockTexture("chemlab"));
+        registerMachineBlockItem("turret_base", new ModelTurretBase(), blockTexture("turret_base"));
 
         registerArmor("steam_helmet", armor(new ModelSteamArmor(0), ArmorItem.Type.HELMET), armorTexture("steam_armor"), ArmorItem.Type.HELMET);
         registerArmor("steam_chestplate", armor(new ModelSteamArmor(0), ArmorItem.Type.CHESTPLATE), armorTexture("steam_armor"), ArmorItem.Type.CHESTPLATE);
@@ -398,6 +404,10 @@ public final class TGSpecialItemRenderRegistry {
         DEFINITIONS.put(id, new ShieldItemDefinition(model, texture));
     }
 
+    private static void registerMachineBlockItem(String id, LegacySimpleModel model, ResourceLocation texture) {
+        DEFINITIONS.put(id, new MachineBlockItemDefinition(model, texture));
+    }
+
     private static LegacyBipedModel armor(LegacyBipedModel model, ArmorItem.Type armorType) {
         boolean head = armorType == ArmorItem.Type.HELMET;
         boolean chest = armorType == ArmorItem.Type.CHESTPLATE;
@@ -462,6 +472,10 @@ public final class TGSpecialItemRenderRegistry {
 
     private static ResourceLocation armorItemTexture(String name) {
         return ResourceLocation.parse("techguns:textures/armors/" + name + ".png");
+    }
+
+    private static ResourceLocation blockTexture(String name) {
+        return ResourceLocation.parse("techguns:textures/blocks/" + name + ".png");
     }
 
     private static ModelResourceLocation modelLocation(String id) {
@@ -585,6 +599,26 @@ public final class TGSpecialItemRenderRegistry {
         }
     }
 
+    private record MachineBlockItemDefinition(LegacySimpleModel model, ResourceLocation texture) implements ItemDefinition {
+
+        @Override
+        public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
+            LegacyRenderContext.begin(poseStack, bufferSource, light, overlay);
+            LegacyModelTexture.set(texture);
+            try {
+                poseStack.pushPose();
+                poseStack.translate(0.5F, 1.5F, 0.5F);
+                poseStack.mulPose(Axis.ZP.rotationDegrees(180.0F));
+                poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
+                model.render(LEGACY_SCALE);
+                poseStack.popPose();
+            } finally {
+                LegacyModelTexture.clear();
+                LegacyRenderContext.end();
+            }
+        }
+    }
+
     private record ShieldItemDefinition(LegacySimpleModel model, ResourceLocation texture) implements ItemDefinition {
 
         @Override
@@ -699,7 +733,7 @@ public final class TGSpecialItemRenderRegistry {
                             1.0F
                     );
                     model.renderVisibleParts(LEGACY_SCALE);
-                    RenderSystem.setShaderColor(2.0F, 2.0F, 2.0F, 2.0F);
+                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
                 } else {
                     model.renderVisibleParts(LEGACY_SCALE);
                 }

@@ -1,6 +1,8 @@
 package com.wiik_wq.techguns;
 
 import com.wiik_wq.techguns.client.TGRenderLayers;
+import com.wiik_wq.techguns.client.render.blockentity.TGMachineBlockEntityRenderer;
+import com.wiik_wq.techguns.common.registration.TGBlockEntities;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import com.wiik_wq.techguns.common.registration.TGCreativeTabs;
 import com.wiik_wq.techguns.common.registration.TGItems;
@@ -10,10 +12,10 @@ import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-
 
 @Mod(TechgunsReborn.MODID)
 public class TechgunsReborn {
@@ -24,6 +26,7 @@ public class TechgunsReborn {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         TGItems.register(modEventBus);
         TGBlocks.register(modEventBus);
+        TGBlockEntities.register(modEventBus);
         TGCreativeTabs.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
@@ -43,6 +46,11 @@ public class TechgunsReborn {
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             event.enqueueWork(TGRenderLayers::register);
+        }
+
+        @SubscribeEvent
+        public static void onRegisterRenderers(EntityRenderersEvent.RegisterRenderers event) {
+            event.registerBlockEntityRenderer(TGBlockEntities.MACHINE.get(), TGMachineBlockEntityRenderer::new);
         }
     }
 }

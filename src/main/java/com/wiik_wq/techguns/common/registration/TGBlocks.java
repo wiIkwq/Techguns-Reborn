@@ -3,7 +3,10 @@ package com.wiik_wq.techguns.common.registration;
 import com.wiik_wq.techguns.TechgunsReborn;
 import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGHorizontalBlock;
+import com.wiik_wq.techguns.common.block.TGMachineBlock;
+import com.wiik_wq.techguns.common.block.TGTurretBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
+import com.wiik_wq.techguns.common.item.TGSpecialRendererBlockItem;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -21,6 +24,7 @@ import net.minecraftforge.registries.RegistryObject;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Stream;
 
 public final class TGBlocks {
@@ -31,10 +35,22 @@ public final class TGBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, TechgunsReborn.MODID);
     public static final DeferredRegister<Item> BLOCK_ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, TechgunsReborn.MODID);
     public static final Map<String, BlockEntry> ENTRIES = new LinkedHashMap<>();
+    private static final Set<String> SPECIAL_MACHINE_BLOCKS = Set.of(
+            "ammo_press",
+            "chem_lab",
+            "turret_base"
+    );
+    private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
+            "ammo_press",
+            "chem_lab",
+            "turret_base"
+    );
 
     static {
         TGBlockCatalog.CUBE_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
-        TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
+        TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.keySet().stream()
+                .filter(id -> !SPECIAL_MACHINE_BLOCKS.contains(id))
+                .forEach(id -> register(id, () -> new Block(defaultProps(id))));
         TGBlockCatalog.HORIZONTAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGHorizontalBlock(defaultProps(id))));
         TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGDirectionalBlock(defaultProps(id))));
         TGBlockCatalog.ROTATED_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
@@ -44,6 +60,9 @@ public final class TGBlocks {
         TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () -> new LadderBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STATIC_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STAIRS.keySet().forEach(id -> register(id, () -> new StairBlock(Blocks.STONE.defaultBlockState(), defaultProps(id))));
+        register("ammo_press", () -> new TGMachineBlock(defaultProps("ammo_press").noOcclusion()));
+        register("chem_lab", () -> new TGMachineBlock(defaultProps("chem_lab").noOcclusion()));
+        register("turret_base", () -> new TGTurretBlock(defaultProps("turret_base").noOcclusion()));
     }
 
     private TGBlocks() {
@@ -64,7 +83,10 @@ public final class TGBlocks {
 
     private static void register(String id, java.util.function.Supplier<Block> supplier) {
         RegistryObject<Block> block = BLOCKS.register(id, supplier);
-        RegistryObject<Item> item = BLOCK_ITEMS.register(id, () -> new BlockItem(block.get(), new Item.Properties()));
+        RegistryObject<Item> item = BLOCK_ITEMS.register(id, () ->
+                SPECIAL_RENDER_BLOCK_ITEMS.contains(id)
+                        ? new TGSpecialRendererBlockItem(block.get(), new Item.Properties())
+                        : new BlockItem(block.get(), new Item.Properties()));
         ENTRIES.put(id, new BlockEntry(id, block, item));
     }
 

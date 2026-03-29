@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Map;
+import java.util.Set;
 
 public class TGItemModelProvider extends ItemModelProvider {
 
@@ -32,13 +33,26 @@ public class TGItemModelProvider extends ItemModelProvider {
     );
     private static final DisplayTransform LADDER_GUI_TRANSFORM =
             new DisplayTransform(30.0F, 225.0F, 0.0F, -1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F);
+    private static final Map<String, String> BLOCK_ITEM_PARENT_OVERRIDES = Map.of(
+            "camonet_wood", "camonet_inventory",
+            "camonet_desert", "camonet_inventory",
+            "camonet_snow", "camonet_inventory",
+            "camonet_top_wood", "camonet_top_inventory",
+            "camonet_top_desert", "camonet_top_inventory",
+            "camonet_top_snow", "camonet_top_inventory"
+    );
     private static final Map<String, DisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
             "metal_ladder", LADDER_GUI_TRANSFORM,
             "shiny_metal_ladder", LADDER_GUI_TRANSFORM,
             "rusty_metal_ladder", LADDER_GUI_TRANSFORM,
             "carbon_ladder", LADDER_GUI_TRANSFORM,
             "slimyladder", LADDER_GUI_TRANSFORM,
-            "charging_station", new DisplayTransform(30.0F, 45.0F, 0.0F, 1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F)
+            "charging_station", new DisplayTransform(30.0F, 45.0F, 0.0F, 2.0F, 2.0F, 0.0F, 0.625F, 0.625F, 0.625F)
+    );
+    private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
+            "ammo_press",
+            "chem_lab",
+            "turret_base"
     );
 
     public TGItemModelProvider(net.minecraft.data.PackOutput output, ExistingFileHelper existingFileHelper) {
@@ -47,13 +61,20 @@ public class TGItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        TGItemCatalog.OBJ_MODEL_ITEMS.forEach(this::objBackingItemModel);
         TGBlocks.all().forEach(entry -> blockItemModel(entry.id()));
         TGItems.all().forEach(entry -> itemModel(entry.id(), entry.style()));
-        TGItemCatalog.OBJ_MODEL_ITEMS.forEach(this::objBackingItemModel);
     }
 
     private void blockItemModel(String id) {
         ItemModelBuilder builder;
+        if (SPECIAL_RENDER_BLOCK_ITEMS.contains(id)) {
+            builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile("builtin/entity"));
+            applyLegacyBlockItemDisplayTransforms(builder, id);
+            applyBlockItemGuiOverride(builder, id);
+            return;
+        }
+
         String itemTexture = TGBlockCatalog.BLOCK_ITEM_TEXTURE_OVERRIDES.get(id);
         if (itemTexture != null) {
             builder = withExistingParent(id, mcLoc("item/generated")).texture("layer0", modLoc("items/" + itemTexture));
@@ -64,11 +85,18 @@ public class TGItemModelProvider extends ItemModelProvider {
 
         String parent = blockItemParent(id);
         builder = withExistingParent(id, modLoc("block/" + parent));
+        applyBlockItemTextures(builder, id, parent);
         applyLegacyBlockItemDisplayTransforms(builder, id);
         applyBlockItemGuiOverride(builder, id);
     }
 
     private void itemModel(String id, TGItems.ItemStyle style) {
+        if ("gaussrifle".equals(id)) {
+            ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile(modLoc("item/gaussrifle_legacy")));
+            applyGaussRifleDisplayTransforms(builder);
+            return;
+        }
+
         if (TGItemCatalog.usesSpecialItemRenderer(id)) {
             ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile("builtin/entity"));
             applyGeneratedDisplayTransforms(builder, id);
@@ -205,6 +233,40 @@ public class TGItemModelProvider extends ItemModelProvider {
         applyTransform(builder, ItemDisplayContext.GUI, transform);
     }
 
+    private void applyBlockItemTextures(ItemModelBuilder builder, String id, String parent) {
+        if ("camonet_inventory".equals(parent)) {
+            builder.texture("0", camonetSupportTexture(id))
+                    .texture("1", camonetNetTexture(id))
+                    .texture("particle", camonetNetTexture(id));
+            return;
+        }
+
+        if ("camonet_top_inventory".equals(parent)) {
+            builder.texture("0", camonetNetTexture(id))
+                    .texture("particle", camonetNetTexture(id));
+        }
+    }
+
+    private ResourceLocation camonetSupportTexture(String id) {
+        if (id.contains("desert")) {
+            return mcLoc("block/acacia_planks");
+        }
+        if (id.contains("snow")) {
+            return mcLoc("block/spruce_planks");
+        }
+        return mcLoc("block/oak_planks");
+    }
+
+    private ResourceLocation camonetNetTexture(String id) {
+        if (id.contains("desert")) {
+            return modLoc("blocks/camonet_desert");
+        }
+        if (id.contains("snow")) {
+            return modLoc("blocks/camonet_snow");
+        }
+        return modLoc("blocks/camonet");
+    }
+
     private Path legacyBlockItemDisplayModel(String id) {
         if (!TGDataPaths.hasLegacySource()) {
             return null;
@@ -303,6 +365,16 @@ public class TGItemModelProvider extends ItemModelProvider {
         return readVec3(json, "scale", 1.0F, 1.0F, 1.0F);
     }
 
+    private void applyGaussRifleDisplayTransforms(ItemModelBuilder builder) {
+        DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault("gaussrifle", DEFAULT_FIRST_PERSON_TRANSFORM);
+        applyTransform(builder, ItemDisplayContext.GUI, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        applyTransform(builder, ItemDisplayContext.GROUND, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F));
+        applyTransform(builder, ItemDisplayContext.FIXED, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+        applyTransform(builder, ItemDisplayContext.HEAD, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F));
+        applyTransform(builder, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, firstPerson);
+        applyTransform(builder, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, new DisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F));
+    }
+
     private record DisplayTransform(float rotationX, float rotationY, float rotationZ,
                                     float translationX, float translationY, float translationZ,
                                     float scaleX, float scaleY, float scaleZ) {
@@ -396,6 +468,9 @@ public class TGItemModelProvider extends ItemModelProvider {
     }
 
     private String blockItemParent(String id) {
+        if (BLOCK_ITEM_PARENT_OVERRIDES.containsKey(id)) {
+            return BLOCK_ITEM_PARENT_OVERRIDES.get(id);
+        }
         if (TGBlockCatalog.CUBE_MODEL_BLOCKS.containsKey(id)) {
             return TGBlockCatalog.CUBE_MODEL_BLOCKS.get(id);
         }
