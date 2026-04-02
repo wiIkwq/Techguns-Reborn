@@ -75,7 +75,6 @@ import net.minecraft.world.item.ArmorItem;
 import net.minecraft.world.item.ItemDisplayContext;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.registries.ForgeRegistries;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -245,7 +244,7 @@ public final class TGSpecialItemRenderRegistry {
         registerModelBackedGun("gaussrifle", rotation(0.0F, -90.0F, 0.0F), 0.9F, 0.5F, 0.35F, 0.25F, 0.35F, 0.5F,
                 vec(0.6F, 0.0F, scale(0.5F) - 0.09F),
                 translations(vec(0.0F, 0.12F, -0.1F), vec(0.0F, 0.05F, -0.17F), vec(0.0F, 0.06F, 0.06F), vec(0.0F, 0.0F, 0.0F), vec(0.0F, 0.0F, -0.05F)));
-        registerModelBackedGun("grenadelauncher", rotation(0.0F, 90.0F, 0.0F), 0.125F, 1.0F, 0.35F, 0.45F, 0.35F, 0.5F,
+        registerModelBackedGun("grenadelauncher", rotation(0.0F, 90.0F, 0.0F), 0.00625F, 1.0F, 0.35F, 0.45F, 0.35F, 0.5F,
                 vec(0.0F, 0.0F, 0.0F),
                 translations(vec(0.0F, 0.19F, -0.09F), vec(0.0F, 0.06F, -0.2F), vec(-0.05F, 0.08F, 0.0F), vec(0.0F, 0.05F, -0.09F), vec(0.11F, 0.01F, -0.05F)));
         registerGun("guidedmissilelauncher", new ModelGuidedMissileLauncher(), 1, rotation(RotationMode.GUN_90), 1.0F, 0.5F, 0.35F, 0.35F, 0.35F, 0.5F,

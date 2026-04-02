@@ -2,11 +2,9 @@ package com.wiik_wq.techguns.client.render.item;
 
 import com.wiik_wq.techguns.common.content.TGItemCatalog;
 import net.minecraft.client.model.HumanoidModel;
-import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.BlockEntityWithoutLevelRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.client.extensions.common.IClientItemExtensions;
@@ -28,18 +26,6 @@ public enum TGGunItemRenderExtensions implements IClientItemExtensions {
             return null;
         }
 
-        if (hand == InteractionHand.MAIN_HAND) {
-            return HumanoidModel.ArmPose.BOW_AND_ARROW;
-        }
-
-        return entityLiving.isUsingItem() && ItemStack.isSameItemSameTags(entityLiving.getUseItem(), itemStack)
-                ? HumanoidModel.ArmPose.BOW_AND_ARROW
-                : null;
-    }
-
-    @Override
-    public boolean applyForgeHandTransform(com.mojang.blaze3d.vertex.PoseStack poseStack, LocalPlayer player, HumanoidArm arm,
-                                           ItemStack itemInHand, float partialTick, float equipProcess, float swingProcess) {
-        return false;
+        return hand == InteractionHand.MAIN_HAND ? HumanoidModel.ArmPose.BOW_AND_ARROW : null;
     }
 }

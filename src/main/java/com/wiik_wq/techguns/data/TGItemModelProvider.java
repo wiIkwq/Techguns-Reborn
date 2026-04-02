@@ -91,9 +91,9 @@ public class TGItemModelProvider extends ItemModelProvider {
     }
 
     private void itemModel(String id, TGItems.ItemStyle style) {
-        if ("gaussrifle".equals(id)) {
-            ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile(modLoc("item/gaussrifle_legacy")));
-            applyGaussRifleDisplayTransforms(builder);
+        if (TGItemCatalog.usesObjItemModel(id)) {
+            ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile(modLoc("item/" + id + "_legacy")));
+            applyObjItemDisplayTransforms(builder, id);
             return;
         }
 
@@ -365,14 +365,39 @@ public class TGItemModelProvider extends ItemModelProvider {
         return readVec3(json, "scale", 1.0F, 1.0F, 1.0F);
     }
 
-    private void applyGaussRifleDisplayTransforms(ItemModelBuilder builder) {
-        DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault("gaussrifle", DEFAULT_FIRST_PERSON_TRANSFORM);
-        applyTransform(builder, ItemDisplayContext.GUI, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-        applyTransform(builder, ItemDisplayContext.GROUND, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F));
-        applyTransform(builder, ItemDisplayContext.FIXED, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-        applyTransform(builder, ItemDisplayContext.HEAD, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F));
-        applyTransform(builder, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, firstPerson);
-        applyTransform(builder, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, new DisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F));
+    private void applyObjItemDisplayTransforms(ItemModelBuilder builder, String id) {
+        if ("gaussrifle".equals(id)) {
+            DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
+            applyTransform(builder, ItemDisplayContext.GUI, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+            applyTransform(builder, ItemDisplayContext.GROUND, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F));
+            applyTransform(builder, ItemDisplayContext.FIXED, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
+            applyTransform(builder, ItemDisplayContext.HEAD, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F));
+            applyTransform(builder, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, firstPerson);
+            applyTransform(builder, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, new DisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F));
+            return;
+        }
+
+        if ("grenadelauncher".equals(id)) {
+            final float normalizedScale = 0.28F;
+            final float firstPersonScale = 0.045F;
+            DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
+            float firstPersonRotationX = firstPerson.rotationX() - 10.0F;
+            float firstPersonRotationY = firstPerson.rotationY() + 65.0F;
+            float firstPersonTranslationX = firstPerson.translationX() * 0.18F;
+            float firstPersonTranslationY = firstPerson.translationY() * 0.68F;
+            float firstPersonTranslationZ = firstPerson.translationZ() * 0.42F;
+            applyTransform(builder, ItemDisplayContext.GUI, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, normalizedScale, normalizedScale, normalizedScale));
+            applyTransform(builder, ItemDisplayContext.GROUND, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.14F, 0.14F, 0.14F));
+            applyTransform(builder, ItemDisplayContext.FIXED, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, normalizedScale, normalizedScale, normalizedScale));
+            applyTransform(builder, ItemDisplayContext.HEAD, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, normalizedScale, normalizedScale, normalizedScale));
+            applyTransform(builder, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, new DisplayTransform(
+                    firstPersonRotationX, firstPersonRotationY, firstPerson.rotationZ(),
+                    firstPersonTranslationX, firstPersonTranslationY, firstPersonTranslationZ,
+                    firstPersonScale, firstPersonScale, firstPersonScale
+            ));
+            applyTransform(builder, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
+                    new DisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.154F, 0.154F, 0.154F));
+        }
     }
 
     private record DisplayTransform(float rotationX, float rotationY, float rotationZ,

@@ -432,7 +432,7 @@ public class ModelLMG extends LegacyMultipartModel {
  }
 	
 	protected void animateBullet(LegacyModelRenderer bullet, float scale, ItemDisplayContext transform, LegacyModelRenderer targetPos, float recoilProgress) {
-		if ( transform == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND || transform == ItemDisplayContext.FIRST_PERSON_LEFT_HAND) {
+		if ( transform == ItemDisplayContext.FIRST_PERSON_RIGHT_HAND) {
 			float x,y,z;
 			recoilProgress = recoilProgress*4F;
 			if (recoilProgress>1.0f) {
