@@ -6,9 +6,11 @@ import com.wiik_wq.techguns.common.registration.TGItems;
 import net.minecraftforge.common.data.LanguageProvider;
 
 import java.io.IOException;
+import java.nio.charset.MalformedInputException;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -26,6 +28,7 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("charging_station", List.of("block.techguns.simplemachine.10")),
             Map.entry("blast_furnace", List.of("block.techguns.simplemachine.11")),
             Map.entry("grinder", List.of("block.techguns.simplemachine2.8")),
+            Map.entry("armor_bench", List.of("block.techguns.simplemachine2.9")),
             Map.entry("ore_copper", List.of("block.techguns.basicore.0")),
             Map.entry("ore_tin", List.of("block.techguns.basicore.1")),
             Map.entry("ore_lead", List.of("block.techguns.basicore.2")),
@@ -60,6 +63,8 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("hole", List.of("block.techguns.tg_spawner.0")),
             Map.entry("soldier_spawn", List.of("block.techguns.tg_spawner.1")),
             Map.entry("bioblob", List.of("block.techguns.bioblob.0")),
+            Map.entry("bugnest_sand", List.of("block.techguns.sand_hard.0")),
+            Map.entry("bugnest_eggs", List.of("block.techguns.slimy.0")),
             Map.entry("military_crate_ammo", List.of("block.techguns.military_crate.0")),
             Map.entry("military_crate_gun", List.of("block.techguns.military_crate.1")),
             Map.entry("military_crate_armor", List.of("block.techguns.military_crate.2")),
@@ -113,11 +118,15 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("ore_cluster_shiny_gem", List.of("block.techguns.orecluster.6")),
             Map.entry("ore_cluster_nether_crystal", List.of("block.techguns.orecluster.7")),
             Map.entry("ore_cluster_oil", List.of("block.techguns.orecluster.8")),
+            Map.entry("nethermetal_panel", List.of("block.techguns.nethermetal.0")),
             Map.entry("nethermetal_grate1", List.of("block.techguns.nethermetal.1")),
             Map.entry("nethermetal_grate2", List.of("block.techguns.nethermetal.2")),
             Map.entry("nethermetal_grey_dark", List.of("block.techguns.nethermetal.3")),
             Map.entry("nethermetal_grey", List.of("block.techguns.nethermetal.4")),
             Map.entry("nethermetal_grey_tiles", List.of("block.techguns.nethermetal.5")),
+            Map.entry("nethermetal_border_red", List.of("block.techguns.nethermetal.6")),
+            Map.entry("nethermetal_plate_black", List.of("block.techguns.nethermetal.7")),
+            Map.entry("nethermetal_plate_red", List.of("block.techguns.nethermetal.8")),
             Map.entry("nethermetal_border_lava", List.of("block.techguns.nethermetal.9")),
             Map.entry("concrete_brown_light_stairs", List.of("block.techguns.stairs_concrete.15")),
             Map.entry("concrete_grey_dark_stairs", List.of("block.techguns.stairs_concrete.7"))
@@ -132,22 +141,19 @@ public class TGLanguageProvider extends LanguageProvider {
 
     @Override
     protected void addTranslations() {
-        Map<String, String> translations = loadLegacyTranslations();
+        Map<String, String> rawTranslations = loadLegacyTranslations();
+        Map<String, String> translations = mergeLegacyTranslations(rawTranslations);
 
-        add("itemGroup.techguns", translations.getOrDefault("itemGroup.techguns", "Techguns"));
+        translations.put("itemGroup.techguns", translations.getOrDefault("itemGroup.techguns", "Techguns"));
 
-        TGBlocks.all().forEach(entry -> add(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
-        TGItems.all().forEach(entry -> add(itemKey(entry.id()), translations.getOrDefault(itemKey(entry.id()), humanize(entry.id()))));
+        TGBlocks.all().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
+        TGItems.all().forEach(entry -> translations.put(itemKey(entry.id()), translations.getOrDefault(itemKey(entry.id()), humanize(entry.id()))));
 
-        translations.forEach((key, value) -> {
-            if (!key.startsWith("item." + TechgunsReborn.MODID + ".") && !key.startsWith("block." + TechgunsReborn.MODID + ".") && !"itemGroup.techguns".equals(key)) {
-                add(key, value);
-            }
-        });
+        translations.forEach(this::add);
     }
 
     private Map<String, String> loadLegacyTranslations() {
-        Map<String, String> result = new HashMap<>();
+        Map<String, String> result = new LinkedHashMap<>();
         if (!TGDataPaths.hasLegacySource()) {
             return result;
         }
@@ -158,18 +164,46 @@ public class TGLanguageProvider extends LanguageProvider {
         }
 
         try {
-            for (String line : Files.readAllLines(file)) {
+            for (String line : readLegacyLines(file)) {
                 if (line.isBlank() || line.startsWith("#") || !line.contains("=")) {
                     continue;
                 }
 
                 String[] parts = line.split("=", 2);
-                result.put(remapKey(parts[0].trim()), parts[1].trim());
+                result.put(parts[0].trim(), parts[1].trim());
             }
         } catch (IOException ignored) {
         }
 
         return result;
+    }
+
+    private Map<String, String> mergeLegacyTranslations(Map<String, String> rawTranslations) {
+        Map<String, String> merged = new LinkedHashMap<>(rawTranslations);
+        rawTranslations.forEach((key, value) -> merged.putIfAbsent(remapKey(key), value));
+        return merged;
+    }
+
+    private List<String> readLegacyLines(Path file) throws IOException {
+        try {
+            return Files.readAllLines(file, StandardCharsets.UTF_8);
+        } catch (MalformedInputException ignored) {
+            return Files.readAllLines(file, StandardCharsets.ISO_8859_1).stream()
+                    .map(this::repairMixedEncoding)
+                    .toList();
+        }
+    }
+
+    private String repairMixedEncoding(String line) {
+        if (!line.contains("Ã") && !line.contains("Â") && !line.contains("â")) {
+            return line;
+        }
+
+        try {
+            return new String(line.getBytes(StandardCharsets.ISO_8859_1), StandardCharsets.UTF_8);
+        } catch (Exception ignored) {
+            return line;
+        }
     }
 
     private String remapKey(String key) {

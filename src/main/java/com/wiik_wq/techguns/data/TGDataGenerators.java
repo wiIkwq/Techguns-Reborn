@@ -24,5 +24,6 @@ public final class TGDataGenerators {
         generator.addProvider(event.includeClient(), new TGItemModelProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new TGLanguageProvider(output, "en_us"));
         generator.addProvider(event.includeClient(), new TGLanguageProvider(output, "ru_ru"));
+        generator.addProvider(event.includeClient(), new TGLanguageProvider(output, "de_de"));
     }
 }
