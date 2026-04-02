@@ -14,27 +14,26 @@ final class TGGunDisplayProfiles {
             "flamethrower", LEGACY_FIRST_PERSON_BASE
     );
 
-    private static final TGDisplayTransform STANDARD_THIRD_PERSON =
-            new TGDisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F);
-    private static final TGDisplayTransform STANDARD_GROUND =
-            new TGDisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F);
-    private static final TGDisplayTransform STANDARD_FIXED =
-            new TGDisplayTransform(0.0F, 180.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
-    private static final TGDisplayTransform STANDARD_HEAD =
-            new TGDisplayTransform(0.0F, 180.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F);
-
-    private static final Map<String, ObjGunProfile> OBJ_GUN_PROFILES = Map.of(
-            "gaussrifle", new ObjGunProfile(
+    private static final Map<GunDisplayFamily, FamilyProfile> FAMILY_PROFILES = Map.of(
+            GunDisplayFamily.STANDARD, new FamilyProfile(
+                    FirstPersonCalibration.identity(),
+                    null,
+                    new TGDisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F),
+                    new TGDisplayTransform(0.0F, 180.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
+                    new TGDisplayTransform(0.0F, 180.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F),
+                    new TGDisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F)
+            ),
+            GunDisplayFamily.OBJ_RIFLE, new FamilyProfile(
                     FirstPersonCalibration.identity(),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F),
-                    STANDARD_THIRD_PERSON
+                    new TGDisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F)
             ),
-            "grenadelauncher", new ObjGunProfile(
-                    new FirstPersonCalibration(-10.0F, 65.0F, 0.0F, 0.18F, 0.68F, 0.42F, 0.045F),
-                    new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.28F, 0.28F, 0.28F),
+            GunDisplayFamily.OBJ_LAUNCHER, new FamilyProfile(
+                    new FirstPersonCalibration(0.0F, 75.0F, -1F, 0F, 0.58F, -0.2F, 0.055F),
+                    new TGDisplayTransform(45.0F, 135.0F, 0.0F, -1.2F, 2F, 0.0F, 0.05F, 0.05F, 0.05F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.14F, 0.14F, 0.14F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.28F, 0.28F, 0.28F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 0.28F, 0.28F, 0.28F),
@@ -42,21 +41,33 @@ final class TGGunDisplayProfiles {
             )
     );
 
+    private static final Map<String, GunDisplayFamily> ITEM_FAMILIES = Map.of(
+            "gaussrifle", GunDisplayFamily.OBJ_RIFLE,
+            "grenadelauncher", GunDisplayFamily.OBJ_LAUNCHER
+    );
+
     private TGGunDisplayProfiles() {
     }
 
     static Map<ItemDisplayContext, TGDisplayTransform> standardTransforms(String id) {
-        EnumMap<ItemDisplayContext, TGDisplayTransform> transforms = new EnumMap<>(ItemDisplayContext.class);
-        transforms.put(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, legacyFirstPerson(id));
-        transforms.put(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, STANDARD_THIRD_PERSON);
-        transforms.put(ItemDisplayContext.GROUND, STANDARD_GROUND);
-        transforms.put(ItemDisplayContext.FIXED, STANDARD_FIXED);
-        transforms.put(ItemDisplayContext.HEAD, STANDARD_HEAD);
-        return Map.copyOf(transforms);
+        return transformsForFamily(GunDisplayFamily.STANDARD, id);
     }
 
     static Map<ItemDisplayContext, TGDisplayTransform> objTransforms(String id) {
-        ObjGunProfile profile = OBJ_GUN_PROFILES.get(id);
+        GunDisplayFamily family = ITEM_FAMILIES.get(id);
+        if (family == null) {
+            return Map.of();
+        }
+        return transformsForFamily(family, id);
+    }
+
+    static String familyName(String id) {
+        GunDisplayFamily family = ITEM_FAMILIES.get(id);
+        return family == null ? GunDisplayFamily.STANDARD.id() : family.id();
+    }
+
+    private static Map<ItemDisplayContext, TGDisplayTransform> transformsForFamily(GunDisplayFamily family, String id) {
+        FamilyProfile profile = FAMILY_PROFILES.get(family);
         if (profile == null) {
             return Map.of();
         }
@@ -67,7 +78,23 @@ final class TGGunDisplayProfiles {
         return LEGACY_FIRST_PERSON_OVERRIDES.getOrDefault(id, LEGACY_FIRST_PERSON_BASE);
     }
 
-    private record ObjGunProfile(FirstPersonCalibration firstPersonCalibration,
+    enum GunDisplayFamily {
+        STANDARD("standard"),
+        OBJ_RIFLE("obj_rifle"),
+        OBJ_LAUNCHER("obj_launcher");
+
+        private final String id;
+
+        GunDisplayFamily(String id) {
+            this.id = id;
+        }
+
+        String id() {
+            return id;
+        }
+    }
+
+    private record FamilyProfile(FirstPersonCalibration firstPersonCalibration,
                                  TGDisplayTransform gui,
                                  TGDisplayTransform ground,
                                  TGDisplayTransform fixed,
@@ -76,7 +103,9 @@ final class TGGunDisplayProfiles {
 
         private Map<ItemDisplayContext, TGDisplayTransform> transformsFor(TGDisplayTransform legacyFirstPerson) {
             EnumMap<ItemDisplayContext, TGDisplayTransform> transforms = new EnumMap<>(ItemDisplayContext.class);
-            transforms.put(ItemDisplayContext.GUI, gui);
+            if (gui != null) {
+                transforms.put(ItemDisplayContext.GUI, gui);
+            }
             transforms.put(ItemDisplayContext.GROUND, ground);
             transforms.put(ItemDisplayContext.FIXED, fixed);
             transforms.put(ItemDisplayContext.HEAD, head);
