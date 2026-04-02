@@ -26,13 +26,8 @@ public class TGItemModelProvider extends ItemModelProvider {
 
     private static final Path LEGACY_ITEM_MODELS = TGDataPaths.resolveLegacy("src", "main", "resources", "assets", "techguns", "models", "item");
     private static final Path MAIN_ASSETS = TGDataPaths.resolve("src", "main", "resources", "assets");
-    private static final DisplayTransform DEFAULT_FIRST_PERSON_TRANSFORM =
-            new DisplayTransform(5.0F, 10F, 5F, 10F, 9F, 3F, 1.0F, 1.0F, 1.0F);
-    private static final Map<String, DisplayTransform> FIRST_PERSON_OVERRIDES = Map.of(
-            "flamethrower", new DisplayTransform(5.0F, 10F, 5F, 10F, 9F, 3F, 1.0F, 1.0F, 1.0F)
-    );
-    private static final DisplayTransform LADDER_GUI_TRANSFORM =
-            new DisplayTransform(30.0F, 225.0F, 0.0F, -1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F);
+    private static final TGDisplayTransform LADDER_GUI_TRANSFORM =
+            new TGDisplayTransform(30.0F, 225.0F, 0.0F, -1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F);
     private static final Map<String, String> BLOCK_ITEM_PARENT_OVERRIDES = Map.of(
             "camonet_wood", "camonet_inventory",
             "camonet_desert", "camonet_inventory",
@@ -41,13 +36,13 @@ public class TGItemModelProvider extends ItemModelProvider {
             "camonet_top_desert", "camonet_top_inventory",
             "camonet_top_snow", "camonet_top_inventory"
     );
-    private static final Map<String, DisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
+    private static final Map<String, TGDisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
             "metal_ladder", LADDER_GUI_TRANSFORM,
             "shiny_metal_ladder", LADDER_GUI_TRANSFORM,
             "rusty_metal_ladder", LADDER_GUI_TRANSFORM,
             "carbon_ladder", LADDER_GUI_TRANSFORM,
             "slimyladder", LADDER_GUI_TRANSFORM,
-            "charging_station", new DisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F)
+            "charging_station", new TGDisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F)
     );
     private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
             "ammo_press",
@@ -93,18 +88,13 @@ public class TGItemModelProvider extends ItemModelProvider {
     private void itemModel(String id, TGItems.ItemStyle style) {
         if (TGItemCatalog.usesObjItemModel(id)) {
             ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile(modLoc("item/" + id + "_legacy")));
-            applyObjItemDisplayTransforms(builder, id);
+            applyTransforms(builder, TGGunDisplayProfiles.objTransforms(id));
             return;
         }
 
         if (TGItemCatalog.usesSpecialItemRenderer(id)) {
             ItemModelBuilder builder = getBuilder(id).parent(new ModelFile.UncheckedModelFile("builtin/entity"));
             applyGeneratedDisplayTransforms(builder, id);
-            return;
-        }
-
-        if (TGItemCatalog.usesObjItemModel(id)) {
-            objBackingItemModel(id);
             return;
         }
 
@@ -149,33 +139,7 @@ public class TGItemModelProvider extends ItemModelProvider {
             return;
         }
 
-        DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
-        builder.transforms()
-                .transform(ItemDisplayContext.FIRST_PERSON_RIGHT_HAND)
-                .rotation(firstPerson.rotationX(), firstPerson.rotationY(), firstPerson.rotationZ())
-                .translation(firstPerson.translationX(), firstPerson.translationY(), firstPerson.translationZ())
-                .scale(firstPerson.scaleX(), firstPerson.scaleY(), firstPerson.scaleZ())
-                .end()
-                .transform(ItemDisplayContext.THIRD_PERSON_RIGHT_HAND)
-                .rotation(0.0F, 0.0F, 0.0F)
-                .translation(0.0F, 3.0F, 1.0F)
-                .scale(0.55F, 0.55F, 0.55F)
-                .end()
-                .transform(ItemDisplayContext.GROUND)
-                .rotation(0.0F, 0.0F, 0.0F)
-                .translation(0.0F, 2.0F, 0.0F)
-                .scale(0.5F, 0.5F, 0.5F)
-                .end()
-                .transform(ItemDisplayContext.FIXED)
-                .rotation(0.0F, 180.0F, 0.0F)
-                .translation(0.0F, 0.0F, 0.0F)
-                .scale(1.0F, 1.0F, 1.0F)
-                .end()
-                .transform(ItemDisplayContext.HEAD)
-                .rotation(0.0F, 180.0F, 0.0F)
-                .translation(0.0F, 13.0F, 7.0F)
-                .scale(1.0F, 1.0F, 1.0F)
-                .end();
+        applyTransforms(builder, TGGunDisplayProfiles.standardTransforms(id));
     }
 
     private void applyShieldDisplayTransforms(ItemModelBuilder builder) {
@@ -226,7 +190,7 @@ public class TGItemModelProvider extends ItemModelProvider {
     }
 
     private void applyBlockItemGuiOverride(ItemModelBuilder builder, String id) {
-        DisplayTransform transform = BLOCK_ITEM_GUI_OVERRIDES.get(id);
+        TGDisplayTransform transform = BLOCK_ITEM_GUI_OVERRIDES.get(id);
         if (transform == null) {
             return;
         }
@@ -305,7 +269,7 @@ public class TGItemModelProvider extends ItemModelProvider {
                 float[] translation = readVec3(transformJson, "translation", 0.0F, 0.0F, 0.0F);
                 float[] scale = readScale(transformJson);
 
-                applyTransform(builder, context, new DisplayTransform(
+                applyTransform(builder, context, new TGDisplayTransform(
                         rotation[0], rotation[1], rotation[2],
                         translation[0], translation[1], translation[2],
                         scale[0], scale[1], scale[2]
@@ -315,7 +279,11 @@ public class TGItemModelProvider extends ItemModelProvider {
         }
     }
 
-    private void applyTransform(ItemModelBuilder builder, ItemDisplayContext context, DisplayTransform transform) {
+    private void applyTransforms(ItemModelBuilder builder, Map<ItemDisplayContext, TGDisplayTransform> transforms) {
+        transforms.forEach((context, transform) -> applyTransform(builder, context, transform));
+    }
+
+    private void applyTransform(ItemModelBuilder builder, ItemDisplayContext context, TGDisplayTransform transform) {
         builder.transforms()
                 .transform(context)
                 .rotation(transform.rotationX(), transform.rotationY(), transform.rotationZ())
@@ -363,46 +331,6 @@ public class TGItemModelProvider extends ItemModelProvider {
 
     private float[] readScale(JsonObject json) {
         return readVec3(json, "scale", 1.0F, 1.0F, 1.0F);
-    }
-
-    private void applyObjItemDisplayTransforms(ItemModelBuilder builder, String id) {
-        if ("gaussrifle".equals(id)) {
-            DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
-            applyTransform(builder, ItemDisplayContext.GUI, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-            applyTransform(builder, ItemDisplayContext.GROUND, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F));
-            applyTransform(builder, ItemDisplayContext.FIXED, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F));
-            applyTransform(builder, ItemDisplayContext.HEAD, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F));
-            applyTransform(builder, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, firstPerson);
-            applyTransform(builder, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND, new DisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.55F, 0.55F, 0.55F));
-            return;
-        }
-
-        if ("grenadelauncher".equals(id)) {
-            final float normalizedScale = 0.28F;
-            final float firstPersonScale = 0.045F;
-            DisplayTransform firstPerson = FIRST_PERSON_OVERRIDES.getOrDefault(id, DEFAULT_FIRST_PERSON_TRANSFORM);
-            float firstPersonRotationX = firstPerson.rotationX() - 10.0F;
-            float firstPersonRotationY = firstPerson.rotationY() + 65.0F;
-            float firstPersonTranslationX = firstPerson.translationX() * 0.18F;
-            float firstPersonTranslationY = firstPerson.translationY() * 0.68F;
-            float firstPersonTranslationZ = firstPerson.translationZ() * 0.42F;
-            applyTransform(builder, ItemDisplayContext.GUI, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, normalizedScale, normalizedScale, normalizedScale));
-            applyTransform(builder, ItemDisplayContext.GROUND, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.14F, 0.14F, 0.14F));
-            applyTransform(builder, ItemDisplayContext.FIXED, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, normalizedScale, normalizedScale, normalizedScale));
-            applyTransform(builder, ItemDisplayContext.HEAD, new DisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, normalizedScale, normalizedScale, normalizedScale));
-            applyTransform(builder, ItemDisplayContext.FIRST_PERSON_RIGHT_HAND, new DisplayTransform(
-                    firstPersonRotationX, firstPersonRotationY, firstPerson.rotationZ(),
-                    firstPersonTranslationX, firstPersonTranslationY, firstPersonTranslationZ,
-                    firstPersonScale, firstPersonScale, firstPersonScale
-            ));
-            applyTransform(builder, ItemDisplayContext.THIRD_PERSON_RIGHT_HAND,
-                    new DisplayTransform(0.0F, 0.0F, 0.0F, 0.0F, 3.0F, 1.0F, 0.154F, 0.154F, 0.154F));
-        }
-    }
-
-    private record DisplayTransform(float rotationX, float rotationY, float rotationZ,
-                                    float translationX, float translationY, float translationZ,
-                                    float scaleX, float scaleY, float scaleZ) {
     }
 
     private ResourceLocation textureForItem(String id) {
