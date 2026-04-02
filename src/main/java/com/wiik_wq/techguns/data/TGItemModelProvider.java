@@ -6,6 +6,7 @@ import com.wiik_wq.techguns.TechgunsReborn;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.content.TGItemCatalog;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
+import com.wiik_wq.techguns.common.registration.TGFluids;
 import com.wiik_wq.techguns.common.registration.TGItems;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemDisplayContext;
@@ -58,7 +59,13 @@ public class TGItemModelProvider extends ItemModelProvider {
     protected void registerModels() {
         TGItemCatalog.OBJ_MODEL_ITEMS.forEach(this::objBackingItemModel);
         TGBlocks.all().forEach(entry -> blockItemModel(entry.id()));
+        TGFluids.allBlocks().forEach(entry -> fluidBlockItemModel(entry.id(), entry.itemTexture()));
         TGItems.all().forEach(entry -> itemModel(entry.id(), entry.style()));
+    }
+
+    private void fluidBlockItemModel(String id, String stillTexture) {
+        withExistingParent(id, mcLoc("item/generated"))
+                .texture("layer0", modLoc("blocks/" + stillTexture));
     }
 
     private void blockItemModel(String id) {

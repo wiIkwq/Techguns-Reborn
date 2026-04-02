@@ -37,11 +37,14 @@ public final class TGCreativeTabs {
         Set<String> emittedItems = new HashSet<>();
         Set<String> emittedBlocks = new HashSet<>();
 
-        TGCreativeTabOrder.legacyItemOrder().forEach(id -> acceptItem(output, emittedItems, id));
-        TGCreativeTabOrder.legacyItemBlockOrder().forEach(id -> acceptBlock(output, emittedBlocks, id));
-        TGItems.all().forEach(entry -> acceptItem(output, emittedItems, entry.id()));
-
         TGCreativeTabOrder.legacyBlockOrder().forEach(id -> acceptBlock(output, emittedBlocks, id));
+        TGCreativeTabOrder.legacyItemOrder().forEach(id -> acceptItem(output, emittedItems, id));
+        TGCreativeTabOrder.legacyStandaloneItemOrder().forEach(id -> acceptItem(output, emittedItems, id));
+        TGCreativeTabOrder.legacyItemBlockOrder().forEach(id -> acceptBlock(output, emittedBlocks, id));
+        TGCreativeTabOrder.legacyToolOrder().forEach(id -> acceptItem(output, emittedItems, id));
+        TGCreativeTabOrder.legacyArmorOrder().forEach(id -> acceptItem(output, emittedItems, id));
+        TGCreativeTabOrder.legacyShieldOrder().forEach(id -> acceptItem(output, emittedItems, id));
+        TGCreativeTabOrder.legacyGunOrder().forEach(id -> acceptItem(output, emittedItems, id));
     }
 
     private static void acceptItem(CreativeModeTab.Output output, Set<String> emittedItems, String id) {
@@ -55,6 +58,12 @@ public final class TGCreativeTabs {
         TGBlocks.BlockEntry entry = TGBlocks.ENTRIES.get(id);
         if (entry != null && emittedBlocks.add(id)) {
             output.accept(entry.item().get());
+            return;
+        }
+
+        TGFluids.FluidBlockEntry fluidEntry = TGFluids.BLOCK_ENTRIES.get(id);
+        if (fluidEntry != null && emittedBlocks.add(id)) {
+            output.accept(fluidEntry.item().get());
         }
     }
 }

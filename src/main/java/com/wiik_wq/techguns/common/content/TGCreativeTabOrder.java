@@ -2,6 +2,7 @@ package com.wiik_wq.techguns.common.content;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 public final class TGCreativeTabOrder {
 
@@ -47,12 +48,11 @@ public final class TGCreativeTabOrder {
             "miningdrill",
             "tfg",
             "laserpistol",
-            "shishkebap",
             "stielgranate",
             "fraggrenade"
     );
 
-    private static final List<String> LEGACY_ITEM_BLOCK_ORDER = List.of(
+    private static final List<String> LEGACY_DOOR_ITEM_BLOCK_ORDER = List.of(
             "door3x3_metal",
             "hangar_door_up",
             "hangar_door_down",
@@ -60,15 +60,35 @@ public final class TGCreativeTabOrder {
             "bunkerdoor"
     );
 
-    private static final List<String> LEGACY_ITEM_ORDER = createLegacyItemOrder();
+    private static final List<String> LEGACY_STANDALONE_ITEM_ORDER = List.of(
+            "radaway",
+            "radpills",
+            "gasmask",
+            "glider",
+            "jumppack",
+            "scubatanks",
+            "nightvisiongoggles",
+            "jetpack",
+            "tacticalmask",
+            "antigravpack"
+    );
+
+    private static final Set<String> LEGACY_DEBUG_ITEM_EXCLUSIONS = Set.of(
+            "worldgentesttool",
+            "buildingscantool"
+    );
+
+    private static final Set<String> LEGACY_CREATIVE_ITEM_EXCLUSIONS = Set.of(
+            "steelbarrel"
+    );
+
+    private static final List<String> LEGACY_SHARED_ITEM_ORDER = createLegacySharedItemOrder();
 
     private static final List<String> LEGACY_BLOCK_ORDER = List.of(
             "ammo_press",
             "metal_press",
             "chem_lab",
             "turret_base",
-            "dungeon_scanner",
-            "dungeon_generator",
             "camo_bench",
             "repair_bench",
             "charging_station",
@@ -130,6 +150,7 @@ public final class TGCreativeTabOrder {
             "steelframe_dark_stairs",
             "concrete_grey_dark_stairs",
             "concrete_brown_light_stairs",
+            "hole",
             "soldier_spawn",
             "neontubes2",
             "neontubes2_rotated",
@@ -163,32 +184,53 @@ public final class TGCreativeTabOrder {
             "oredrill_scaffold",
             "oredrill_rod",
             "oredrill_engine",
-            "oredrill_controller"
+            "oredrill_controller",
+            "block_creeper_acid",
+            "block_milk"
     );
 
     private TGCreativeTabOrder() {
     }
 
     public static List<String> legacyItemOrder() {
-        return LEGACY_ITEM_ORDER;
+        return LEGACY_SHARED_ITEM_ORDER;
     }
 
     public static List<String> legacyBlockOrder() {
         return LEGACY_BLOCK_ORDER;
     }
 
-    public static List<String> legacyItemBlockOrder() {
-        return LEGACY_ITEM_BLOCK_ORDER;
+    public static List<String> legacyStandaloneItemOrder() {
+        return LEGACY_STANDALONE_ITEM_ORDER;
     }
 
-    private static List<String> createLegacyItemOrder() {
+    public static List<String> legacyToolOrder() {
+        return TGItemCatalog.HANDHELD_ITEMS;
+    }
+
+    public static List<String> legacyArmorOrder() {
+        return TGItemCatalog.ARMOR_ITEMS;
+    }
+
+    public static List<String> legacyShieldOrder() {
+        return TGItemCatalog.SHIELD_ITEMS;
+    }
+
+    public static List<String> legacyGunOrder() {
+        return LEGACY_GUN_ORDER;
+    }
+
+    public static List<String> legacyItemBlockOrder() {
+        return LEGACY_DOOR_ITEM_BLOCK_ORDER;
+    }
+
+    private static List<String> createLegacySharedItemOrder() {
         List<String> order = new ArrayList<>();
-        order.addAll(TGItemCatalog.SIMPLE_ITEMS);
-        order.addAll(LEGACY_ITEM_BLOCK_ORDER);
-        order.addAll(TGItemCatalog.HANDHELD_ITEMS);
-        order.addAll(TGItemCatalog.ARMOR_ITEMS);
-        order.addAll(TGItemCatalog.SHIELD_ITEMS);
-        order.addAll(LEGACY_GUN_ORDER);
+        TGItemCatalog.SIMPLE_ITEMS.stream()
+                .filter(id -> !LEGACY_STANDALONE_ITEM_ORDER.contains(id))
+                .filter(id -> !LEGACY_DEBUG_ITEM_EXCLUSIONS.contains(id))
+                .filter(id -> !LEGACY_CREATIVE_ITEM_EXCLUSIONS.contains(id))
+                .forEach(order::add);
         return List.copyOf(order);
     }
 }

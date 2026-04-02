@@ -2,6 +2,7 @@ package com.wiik_wq.techguns.data;
 
 import com.wiik_wq.techguns.TechgunsReborn;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
+import com.wiik_wq.techguns.common.registration.TGFluids;
 import com.wiik_wq.techguns.common.registration.TGItems;
 import net.minecraftforge.common.data.LanguageProvider;
 
@@ -147,6 +148,7 @@ public class TGLanguageProvider extends LanguageProvider {
         translations.put("itemGroup.techguns", translations.getOrDefault("itemGroup.techguns", "Techguns"));
 
         TGBlocks.all().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
+        TGFluids.allBlocks().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
         TGItems.all().forEach(entry -> translations.put(itemKey(entry.id()), translations.getOrDefault(itemKey(entry.id()), humanize(entry.id()))));
 
         translations.forEach(this::add);

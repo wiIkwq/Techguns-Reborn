@@ -5,6 +5,7 @@ import com.wiik_wq.techguns.client.render.blockentity.TGMachineBlockEntityRender
 import com.wiik_wq.techguns.common.registration.TGBlockEntities;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import com.wiik_wq.techguns.common.registration.TGCreativeTabs;
+import com.wiik_wq.techguns.common.registration.TGFluids;
 import com.wiik_wq.techguns.common.registration.TGItems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -26,6 +27,7 @@ public class TechgunsReborn {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         TGItems.register(modEventBus);
         TGBlocks.register(modEventBus);
+        TGFluids.register(modEventBus);
         TGBlockEntities.register(modEventBus);
         TGCreativeTabs.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
