@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=east": {
+      "model": "techguns:block/basicmachine",
+      "y": 90
+    },
+    "facing=north": {
+      "model": "techguns:block/basicmachine"
+    },
+    "facing=south": {
+      "model": "techguns:block/basicmachine",
+      "y": 180
+    },
+    "facing=west": {
+      "model": "techguns:block/basicmachine",
+      "y": 270
+    }
+  }
+}

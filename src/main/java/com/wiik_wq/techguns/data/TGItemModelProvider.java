@@ -36,7 +36,8 @@ public class TGItemModelProvider extends ItemModelProvider {
             "camonet_top_wood", "camonet_top_inventory",
             "camonet_top_desert", "camonet_top_inventory",
             "camonet_top_snow", "camonet_top_inventory",
-            "armor_bench", "upgrade_bench"
+            "armor_bench", "upgrade_bench",
+            "sandbags", "sandbags_inventory"
     );
     private static final Map<String, TGDisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
             "metal_ladder", LADDER_GUI_TRANSFORM,
@@ -44,7 +45,8 @@ public class TGItemModelProvider extends ItemModelProvider {
             "rusty_metal_ladder", LADDER_GUI_TRANSFORM,
             "carbon_ladder", LADDER_GUI_TRANSFORM,
             "slimyladder", LADDER_GUI_TRANSFORM,
-            "charging_station", new TGDisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F)
+            "charging_station", new TGDisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F),
+            "sandbags", new TGDisplayTransform(28.0F, 225.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.72F, 0.72F, 0.72F)
     );
     private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
             "ammo_press",
