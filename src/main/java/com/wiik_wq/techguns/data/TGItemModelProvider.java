@@ -29,22 +29,26 @@ public class TGItemModelProvider extends ItemModelProvider {
     private static final Path MAIN_ASSETS = TGDataPaths.resolve("src", "main", "resources", "assets");
     private static final TGDisplayTransform LADDER_GUI_TRANSFORM =
             new TGDisplayTransform(30.0F, 225.0F, 0.0F, -1.0F, 1.0F, 0.0F, 0.625F, 0.625F, 0.625F);
-    private static final Map<String, String> BLOCK_ITEM_PARENT_OVERRIDES = Map.of(
-            "camonet_wood", "camonet_inventory",
-            "camonet_desert", "camonet_inventory",
-            "camonet_snow", "camonet_inventory",
-            "camonet_top_wood", "camonet_top_inventory",
-            "camonet_top_desert", "camonet_top_inventory",
-            "camonet_top_snow", "camonet_top_inventory",
-            "armor_bench", "upgrade_bench",
-            "sandbags", "sandbags_inventory"
+    private static final Map<String, String> BLOCK_ITEM_PARENT_OVERRIDES = Map.ofEntries(
+            Map.entry("camonet_wood", "camonet_inventory"),
+            Map.entry("camonet_desert", "camonet_inventory"),
+            Map.entry("camonet_snow", "camonet_inventory"),
+            Map.entry("camonet_top_wood", "camonet_top_inventory"),
+            Map.entry("camonet_top_desert", "camonet_top_inventory"),
+            Map.entry("camonet_top_snow", "camonet_top_inventory"),
+            Map.entry("armor_bench", "upgrade_bench"),
+            Map.entry("sandbags", "sandbags_inventory"),
+            Map.entry("lamp_yellow", "lamp_inventory_yellow"),
+            Map.entry("lamp_white", "lamp_inventory_white"),
+            Map.entry("lantern_yellow", "lantern_inventory_yellow"),
+            Map.entry("lantern_white", "lantern_inventory_white")
     );
     private static final Map<String, TGDisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
             "metal_ladder", LADDER_GUI_TRANSFORM,
             "shiny_metal_ladder", LADDER_GUI_TRANSFORM,
             "rusty_metal_ladder", LADDER_GUI_TRANSFORM,
             "carbon_ladder", LADDER_GUI_TRANSFORM,
-            "slimyladder", LADDER_GUI_TRANSFORM,
+            "slimyladder", new TGDisplayTransform(90F, 0F, 0F, 0.0F, 0.0F, 0.0F, 0.9F, 0.9F, 0.9F),
             "charging_station", new TGDisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F),
             "sandbags", new TGDisplayTransform(28.0F, 225.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.72F, 0.72F, 0.72F)
     );
