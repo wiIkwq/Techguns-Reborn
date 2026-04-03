@@ -63,6 +63,7 @@ import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRiotShield;
 import com.wiik_wq.techguns.client.render.legacy.model.item.ModelRocket;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelAmmoPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelChemLab;
+import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelMetalPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelTurretBase;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -298,6 +299,7 @@ public final class TGSpecialItemRenderRegistry {
         registerShield("ballistic_shield", new ModelBallisticShield(), armorItemTexture("ballistic_shield"));
         registerShield("advanced_shield", new ModelAdvancedShield(), armorItemTexture("advanced_shield_silver"));
         registerMachineBlockItem("ammo_press", new ModelAmmoPress(), blockTexture("ammopress"));
+        registerMachineBlockItem("metal_press", new ModelMetalPress(), blockTexture("metalpress"));
         registerMachineBlockItem("chem_lab", new ModelChemLab(), blockTexture("chemlab"));
         registerMachineBlockItem("turret_base", new ModelTurretBase(), blockTexture("turret_base"));
 

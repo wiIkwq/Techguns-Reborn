@@ -37,6 +37,7 @@ public final class TGBlocks {
     public static final Map<String, BlockEntry> ENTRIES = new LinkedHashMap<>();
     private static final Set<String> SPECIAL_MACHINE_BLOCKS = Set.of(
             "ammo_press",
+            "metal_press",
             "chem_lab",
             "turret_base"
     );
@@ -56,6 +57,7 @@ public final class TGBlocks {
         TGBlockCatalog.STATIC_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STAIRS.keySet().forEach(id -> register(id, () -> new StairBlock(Blocks.STONE.defaultBlockState(), defaultProps(id))));
         register("ammo_press", () -> new TGMachineBlock(defaultProps("ammo_press").noOcclusion()));
+        register("metal_press", () -> new TGMachineBlock(defaultProps("metal_press").noOcclusion()));
         register("chem_lab", () -> new TGMachineBlock(defaultProps("chem_lab").noOcclusion()));
         register("turret_base", () -> new TGTurretBlock(defaultProps("turret_base").noOcclusion()));
     }
@@ -95,7 +97,7 @@ public final class TGBlocks {
             properties = properties.lightLevel(state -> lightLevel);
         }
 
-        if (TGBlockCatalog.CUTOUT_BLOCKS.contains(id) || id.contains("glass") || id.contains("lamp") || id.contains("lantern")) {
+        if (TGBlockCatalog.CUTOUT_BLOCKS.contains(id) || id.contains("glass") || id.contains("lamp") || id.contains("lantern") || "armor_bench".equals(id)) {
             properties = properties.noOcclusion();
         }
 

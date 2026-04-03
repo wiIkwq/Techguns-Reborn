@@ -18,6 +18,7 @@ public final class TGBlockEntities {
             () -> BlockEntityType.Builder.of(
                     TGMachineBlockEntity::new,
                     TGBlocks.ENTRIES.get("ammo_press").block().get(),
+                    TGBlocks.ENTRIES.get("metal_press").block().get(),
                     TGBlocks.ENTRIES.get("chem_lab").block().get(),
                     TGBlocks.ENTRIES.get("turret_base").block().get()
             ).build(null)

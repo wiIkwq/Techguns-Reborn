@@ -7,6 +7,7 @@ import com.wiik_wq.techguns.client.render.legacy.model.LegacyModelTexture;
 import com.wiik_wq.techguns.client.render.legacy.model.LegacySimpleModel;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelAmmoPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelChemLab;
+import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelMetalPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelTurretBase;
 import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
@@ -26,11 +27,13 @@ public class TGMachineBlockEntityRenderer implements BlockEntityRenderer<TGMachi
     private static final float LEGACY_SCALE = 0.0625F;
     private static final Map<String, LegacySimpleModel> MODELS = Map.of(
             "ammo_press", new ModelAmmoPress(),
+            "metal_press", new ModelMetalPress(),
             "chem_lab", new ModelChemLab(),
             "turret_base", new ModelTurretBase()
     );
     private static final Map<String, ResourceLocation> TEXTURES = Map.of(
             "ammo_press", ResourceLocation.parse("techguns:textures/blocks/ammopress.png"),
+            "metal_press", ResourceLocation.parse("techguns:textures/blocks/metalpress.png"),
             "chem_lab", ResourceLocation.parse("techguns:textures/blocks/chemlab.png"),
             "turret_base", ResourceLocation.parse("techguns:textures/blocks/turret_base.png")
     );

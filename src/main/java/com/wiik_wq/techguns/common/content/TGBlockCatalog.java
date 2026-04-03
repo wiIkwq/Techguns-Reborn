@@ -81,7 +81,8 @@ public final class TGBlockCatalog {
             "door3x3_metal",
             "door3x3_nether",
             "hangar_door_up",
-            "hangar_door_down"
+            "hangar_door_down",
+            "armor_bench"
     );
 
     public static final Map<String, String> HORIZONTAL_MODEL_NAMES = Map.ofEntries(
@@ -89,7 +90,8 @@ public final class TGBlockCatalog {
             Map.entry("door3x3_metal", "techdoor3x3_full"),
             Map.entry("door3x3_nether", "techdoor3x3_full_nether"),
             Map.entry("hangar_door_up", "hangar_door_closed"),
-            Map.entry("hangar_door_down", "hangar_door_down_closed")
+            Map.entry("hangar_door_down", "hangar_door_down_closed"),
+            Map.entry("armor_bench", "upgrade_bench")
     );
 
     public static final List<String> DIRECTIONAL_MODEL_BLOCKS = List.of(
@@ -111,9 +113,7 @@ public final class TGBlockCatalog {
 
     public static final Map<String, String> GENERATED_CUBE_ALL_BLOCKS = Map.ofEntries(
             Map.entry("ammo_press", "ammopress"),
-            Map.entry("metal_press", "metalpress"),
             Map.entry("chem_lab", "chemlab"),
-            Map.entry("armor_bench", "armor_bench_bottom"),
             Map.entry("turret_base", "turret_base")
     );
 
