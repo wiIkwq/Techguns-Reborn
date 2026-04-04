@@ -130,7 +130,7 @@ public final class TGSpecialItemRenderRegistry {
     private static final float[][] ROCKET_TRANSLATIONS = translations(
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, -0.1F, 0.02F),
-            vec(0.08F, 0.1F, 0.0F),
+            vec(0.08F, -0.02F, 0.0F),
             vec(0.0F, 0.0F, 0.0F),
             vec(0.0F, 0.0F, 0.0F)
     );
@@ -289,11 +289,11 @@ public final class TGSpecialItemRenderRegistry {
                 vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag_inc"), AS50_MAG_TRANSLATIONS, true, true);
         registerMultipartItem("as50magazine_explosive", new ModelAS50Mag(false), 1, rotation(-180.0F, 180.0F, 0.0F), 1.5F, 0.5F, 0.35F, 0.75F, 0.5F, 0.5F,
                 vec(0.0325F, -0.2F, 0.33F), gunTexture("as50_mag_exp"), AS50_MAG_TRANSLATIONS, true, true);
-        registerMultipartItem("rocket", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.5F, 0.5F, 0.5F,
+        registerMultipartItem("rocket", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.45F, 0.5F, 0.5F,
                 vec(0.0F, 0.0F, 0.1F), gunTexture("rocket"), ROCKET_TRANSLATIONS, true, true);
-        registerMultipartItem("rocket_nuke", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.5F, 0.5F, 0.5F,
+        registerMultipartItem("rocket_nuke", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.45F, 0.5F, 0.5F,
                 vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_nuke"), ROCKET_TRANSLATIONS, true, true);
-        registerMultipartItem("rocket_high_velocity", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.5F, 0.5F, 0.5F,
+        registerMultipartItem("rocket_high_velocity", new ModelRocket(), 1, rotation(-180.0F, -90.0F, -90.0F), 1.5F, 0.35F, 0.35F, 0.45F, 0.5F, 0.5F,
                 vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_hv"), ROCKET_TRANSLATIONS, true, true);
         registerShield("riot_shield", new ModelRiotShield(), armorItemTexture("riot_shield"));
         registerShield("ballistic_shield", new ModelBallisticShield(), armorItemTexture("ballistic_shield"));
