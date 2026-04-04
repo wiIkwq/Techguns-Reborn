@@ -5,6 +5,7 @@ import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelExoSuit;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelSteamArmor;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelT3PowerArmor;
 import com.wiik_wq.techguns.client.render.legacy.model.armor.ModelT4PowerArmorMk2;
+import com.wiik_wq.techguns.common.item.TGArmorCamoSupport;
 import net.minecraft.client.model.HumanoidModel;
 import net.minecraft.client.model.Model;
 import net.minecraft.resources.ResourceLocation;
@@ -76,6 +77,11 @@ public final class TGArmorRenderRegistry {
     }
 
     public static @Nullable String getArmorTexture(ItemStack stack, EquipmentSlot slot) {
+        ResourceLocation camoTexture = TGArmorCamoSupport.texture(stack);
+        if (camoTexture != null) {
+            return camoTexture.toString();
+        }
+
         String itemId = itemId(stack);
         if (itemId == null) {
             return null;

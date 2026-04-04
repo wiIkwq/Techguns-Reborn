@@ -65,6 +65,7 @@ import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelAmmoPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelChemLab;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelMetalPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelTurretBase;
+import com.wiik_wq.techguns.common.item.TGArmorCamoSupport;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.LightTexture;
@@ -712,8 +713,12 @@ public final class TGSpecialItemRenderRegistry {
         @Override
         public void render(ItemStack stack, ItemDisplayContext context, PoseStack poseStack, MultiBufferSource bufferSource, int light, int overlay) {
             int renderLight = context == ItemDisplayContext.GUI ? LightTexture.FULL_BRIGHT : light;
+            ResourceLocation activeTexture = TGArmorCamoSupport.texture(stack);
+            if (activeTexture == null) {
+                activeTexture = texture;
+            }
             LegacyRenderContext.begin(poseStack, bufferSource, renderLight, overlay);
-            LegacyModelTexture.set(texture);
+            LegacyModelTexture.set(activeTexture);
             try {
                 poseStack.pushPose();
                 // ItemRenderer shifts BEWLR items to block-space origin before calling us.
