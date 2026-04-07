@@ -299,7 +299,7 @@ public final class TGSpecialItemRenderRegistry {
                 vec(0.0F, 0.0F, 0.1F), gunTexture("rocket_hv"), ROCKET_TRANSLATIONS, true, true);
         registerShield("riot_shield", new ModelRiotShield(), armorItemTexture("riot_shield"));
         registerShield("ballistic_shield", new ModelBallisticShield(), armorItemTexture("ballistic_shield"));
-        registerShield("advanced_shield", new ModelAdvancedShield(), armorItemTexture("advanced_shield_silver"));
+        registerShield("advanced_shield", new ModelAdvancedShield(), armorItemTexture("advanced_shield"));
         registerMachineBlockItem("ammo_press", new ModelAmmoPress(), blockTexture("ammopress"));
         registerMachineBlockItem("metal_press", new ModelMetalPress(), blockTexture("metalpress"));
         registerMachineBlockItem("chem_lab", new ModelChemLab(), blockTexture("chemlab"));
