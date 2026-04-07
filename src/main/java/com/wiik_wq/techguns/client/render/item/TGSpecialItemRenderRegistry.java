@@ -69,6 +69,7 @@ import com.wiik_wq.techguns.common.item.TGArmorCamoSupport;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.LightTexture;
+import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -736,17 +737,21 @@ public final class TGSpecialItemRenderRegistry {
                 poseStack.mulPose(Axis.XP.rotationDegrees(-180.0F));
                 poseStack.mulPose(Axis.YP.rotationDegrees(180.0F));
                 poseStack.translate(0.0F, previewYOffset(context, armorType), 0.0F);
+                model.renderVisibleParts(LEGACY_SCALE);
                 if (context == ItemDisplayContext.GUI) {
-                    RenderSystem.setShaderColor(
-                            GUI_ARMOR_BRIGHTNESS_MULTIPLIER,
-                            GUI_ARMOR_BRIGHTNESS_MULTIPLIER,
-                            GUI_ARMOR_BRIGHTNESS_MULTIPLIER,
-                            1.0F
-                    );
-                    model.renderVisibleParts(LEGACY_SCALE);
-                    RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-                } else {
-                    model.renderVisibleParts(LEGACY_SCALE);
+                    float emissiveBoost = guiEmissiveBoost(activeTexture);
+                    if (emissiveBoost > 0.0F) {
+                        model.renderVisibleParts(
+                                poseStack,
+                                bufferSource.getBuffer(RenderType.eyes(activeTexture)),
+                                LightTexture.FULL_BRIGHT,
+                                overlay,
+                                emissiveBoost,
+                                emissiveBoost,
+                                emissiveBoost,
+                                1.0F
+                        );
+                    }
                 }
                 poseStack.popPose();
             } finally {
@@ -782,6 +787,20 @@ public final class TGSpecialItemRenderRegistry {
                 case CHESTPLATE -> GUI_ARMOR_SCALE_MULTIPLIER * 0.67F;
                 case HELMET, BOOTS -> GUI_ARMOR_SCALE_MULTIPLIER;
             };
+        }
+
+        private static float guiEmissiveBoost(ResourceLocation texture) {
+            String path = texture.getPath();
+            if (path.contains("steam_armor")) {
+                return 0.28F;
+            }
+            if (path.contains("powerarmor_mk2")) {
+                return 0.32F;
+            }
+            if (path.contains("powerarmor")) {
+                return 0.28F;
+            }
+            return 0.0F;
         }
     }
 }
