@@ -25,7 +25,7 @@ final class TGGunDisplayProfiles {
             ),
             GunDisplayFamily.OBJ_RIFLE, new FamilyProfile(
                     FirstPersonCalibration.identity(),
-                    new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
+                    new TGDisplayTransform(10.0F, -45.0F, -25.0F, 2F, -0.5F, 0.0F, 0.20F, 0.20F, 0.20F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 2.0F, 0.0F, 0.5F, 0.5F, 0.5F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F),
                     new TGDisplayTransform(0.0F, 90.0F, 0.0F, 0.0F, 13.0F, 7.0F, 1.0F, 1.0F, 1.0F),
