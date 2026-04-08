@@ -225,7 +225,7 @@ public final class TGSpecialItemRenderRegistry {
                 translations(vec(0.0F, 0.1F, 0.04F), vec(0.0F, -0.01F, -0.03F), vec(0.08F, 0.0F, 0.0F), vec(0.0F, 0.05F, 0.15F), vec(-0.18F, 0.0F, -0.05F)));
         registerGun("chainsaw", new ModelChainsaw(), 2, rotation(RotationMode.GUN_90), 0.95F, 0.5F, 0.35F, 0.45F, 0.35F, 0.5F,
                 vec(-0.4F, -0.2F, scale(1.0F) - 0.09F), gunTextures("chainsaw", "chainsaw"),
-                translations(vec(0.0F, -0.08F, 0.15F), vec(0.0F, -0.5F, 0.04F), vec(0.03F, 0.01F, 0.0F), vec(0.0F, 0.0F, 0.0F), vec(-0.07F, -0.03F, -0.11F)));
+                translations(vec(0.0F, -0.08F, 0.15F), vec(0.0F, -0.5F, 0.04F), vec(0.03F, -0.1F, 0.0F), vec(0.0F, 0.0F, 0.0F), vec(-0.07F, -0.03F, -0.11F)));
         registerGun("scatterbeamrifle", new ModelLasergun2(), 1, rotation(RotationMode.GUN), 1.0F, 0.5F, 0.35F, 0.35F, 0.35F, 0.5F,
                 vec(scale(0.5F), -0.1F, 0.1F), gunTexture("lasergunnew"),
                 translations(vec(0.0F, 0.04F, -0.05F), vec(0.0F, 0.01F, -0.1F), vec(0.0F, 0.0F, 0.0F), vec(0.0F, 0.0F, 0.0F), vec(0.0F, 0.0F, -0.05F)));
