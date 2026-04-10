@@ -37,6 +37,7 @@ public class TGItemModelProvider extends ItemModelProvider {
             Map.entry("camonet_top_desert", "camonet_top_inventory"),
             Map.entry("camonet_top_snow", "camonet_top_inventory"),
             Map.entry("armor_bench", "upgrade_bench"),
+            Map.entry("charging_station", "charging_station"),
             Map.entry("sandbags", "sandbags_inventory"),
             Map.entry("lamp_yellow", "lamp_inventory_yellow"),
             Map.entry("lamp_white", "lamp_inventory_white"),
