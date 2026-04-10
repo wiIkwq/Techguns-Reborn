@@ -153,7 +153,10 @@ public final class TGBlockCatalog {
 
     public static final Map<String, String> STATIC_MODEL_BLOCKS = Map.ofEntries(
             Map.entry("lamp_yellow", "lamp_yellow"),
-            Map.entry("lamp_white", "lamp_white"),
+            Map.entry("lamp_white", "lamp_white")
+    );
+
+    public static final Map<String, String> LANTERN_BLOCKS = Map.ofEntries(
             Map.entry("lantern_yellow", "lantern_yellow"),
             Map.entry("lantern_white", "lantern_white")
     );

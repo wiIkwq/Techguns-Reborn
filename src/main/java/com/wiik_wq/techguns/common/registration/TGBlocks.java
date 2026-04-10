@@ -3,6 +3,7 @@ package com.wiik_wq.techguns.common.registration;
 import com.wiik_wq.techguns.TechgunsReborn;
 import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGHorizontalBlock;
+import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
 import com.wiik_wq.techguns.common.block.TGTurretBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
@@ -55,6 +56,7 @@ public final class TGBlocks {
         TGBlockCatalog.CAMONET_TOP_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () -> new LadderBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STATIC_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
+        TGBlockCatalog.LANTERN_BLOCKS.keySet().forEach(id -> register(id, () -> new TGLanternBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STAIRS.keySet().forEach(id -> register(id, () -> new StairBlock(Blocks.STONE.defaultBlockState(), defaultProps(id))));
         register("ammo_press", () -> new TGMachineBlock(defaultProps("ammo_press").noOcclusion()));
         register("metal_press", () -> new TGMachineBlock(defaultProps("metal_press").noOcclusion()));

@@ -1,6 +1,7 @@
 package com.wiik_wq.techguns.data;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import net.minecraft.core.Direction;
@@ -32,6 +33,7 @@ public class TGBlockStateProvider extends BlockStateProvider {
         TGBlockCatalog.CAMONET_TOP_BLOCKS.forEach(this::camonetTopModel);
         TGBlockCatalog.LADDER_BLOCKS.forEach(this::ladderModel);
         TGBlockCatalog.STATIC_MODEL_BLOCKS.forEach(this::simpleExistingModel);
+        TGBlockCatalog.LANTERN_BLOCKS.forEach(this::lanternModel);
         TGBlockCatalog.STAIRS.forEach(this::stairsModel);
     }
 
@@ -115,6 +117,22 @@ public class TGBlockStateProvider extends BlockStateProvider {
         ModelFile stairsInner = models().stairsInner(id + "_inner", modLoc("blocks/" + textureName), modLoc("blocks/" + textureName), modLoc("blocks/" + textureName));
         ModelFile stairsOuter = models().stairsOuter(id + "_outer", modLoc("blocks/" + textureName), modLoc("blocks/" + textureName), modLoc("blocks/" + textureName));
         stairsBlock((StairBlock) block.get(), stairs, stairsInner, stairsOuter);
+    }
+
+    private void lanternModel(String id, String modelName) {
+        RegistryObject<Block> block = entry(id);
+        ModelFile base = models().getExistingFile(modLoc("block/" + modelName));
+        ModelFile side = models().getExistingFile(modLoc("block/" + modelName.replace("lantern_", "lantern_side_")));
+        ModelFile top = models().getExistingFile(modLoc("block/" + modelName.replace("lantern_", "lantern_top_")));
+
+        var builder = getMultipartBuilder(block.get());
+        builder.part().modelFile(base).addModel();
+        builder.part().modelFile(side).rotationY(270).addModel().condition(TGLanternBlock.NORTH, true);
+        builder.part().modelFile(side).rotationY(0).addModel().condition(TGLanternBlock.EAST, true);
+        builder.part().modelFile(side).rotationY(90).addModel().condition(TGLanternBlock.SOUTH, true);
+        builder.part().modelFile(side).rotationY(180).addModel().condition(TGLanternBlock.WEST, true);
+        builder.part().modelFile(top).addModel().condition(TGLanternBlock.UP, true);
+        builder.part().modelFile(top).rotationX(180).addModel().condition(TGLanternBlock.DOWN, true);
     }
 
     private RegistryObject<Block> entry(String id) {
