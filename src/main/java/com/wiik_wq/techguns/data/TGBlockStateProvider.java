@@ -105,10 +105,16 @@ public class TGBlockStateProvider extends BlockStateProvider {
     private void ladderModel(String id, String modelName) {
         RegistryObject<Block> block = entry(id);
         ModelFile model = models().getExistingFile(modLoc("block/" + modelName));
-        getVariantBuilder(block.get()).forAllStates(state -> ConfiguredModel.builder()
-                .modelFile(model)
-                .rotationY(rotationForHorizontal(state.getValue(net.minecraft.world.level.block.LadderBlock.FACING)))
-                .build());
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            Direction direction = state.getValue(net.minecraft.world.level.block.LadderBlock.FACING);
+            ConfiguredModel.Builder<?> builder = ConfiguredModel.builder()
+                    .modelFile(model)
+                    .rotationY(rotationForLegacyLadder(direction));
+            if ("slimyladder".equals(id)) {
+                builder.rotationX(90);
+            }
+            return builder.build();
+        });
     }
 
     private void stairsModel(String id, String textureName) {
@@ -157,6 +163,16 @@ public class TGBlockStateProvider extends BlockStateProvider {
             case SOUTH -> 0;
             case WEST -> 90;
             case EAST -> 270;
+            case UP, DOWN -> 0;
+        };
+    }
+
+    private int rotationForLegacyLadder(Direction direction) {
+        return switch (direction) {
+            case NORTH -> 180;
+            case EAST -> 270;
+            case SOUTH -> 0;
+            case WEST -> 90;
             case UP, DOWN -> 0;
         };
     }

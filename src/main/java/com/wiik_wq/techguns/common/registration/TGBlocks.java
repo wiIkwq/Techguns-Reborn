@@ -3,8 +3,10 @@ package com.wiik_wq.techguns.common.registration;
 import com.wiik_wq.techguns.TechgunsReborn;
 import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGHorizontalBlock;
+import com.wiik_wq.techguns.common.block.TGLadderBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
+import com.wiik_wq.techguns.common.block.TGSlimyLadderBlock;
 import com.wiik_wq.techguns.common.block.TGTurretBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.item.TGSpecialRendererBlockItem;
@@ -12,7 +14,6 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.material.MapColor;
@@ -54,7 +55,10 @@ public final class TGBlocks {
         TGBlockCatalog.MILITARY_CRATE_TEXTURES.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).sound(SoundType.WOOD))));
         TGBlockCatalog.CAMONET_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.CAMONET_TOP_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
-        TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () -> new LadderBlock(defaultProps(id).noOcclusion())));
+        TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () ->
+                "slimyladder".equals(id)
+                        ? new TGSlimyLadderBlock(defaultProps(id).noOcclusion().sound(SoundType.SLIME_BLOCK))
+                        : new TGLadderBlock(defaultProps(id).noOcclusion().sound(SoundType.METAL))));
         TGBlockCatalog.STATIC_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LANTERN_BLOCKS.keySet().forEach(id -> register(id, () -> new TGLanternBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STAIRS.keySet().forEach(id -> register(id, () -> new StairBlock(Blocks.STONE.defaultBlockState(), defaultProps(id))));
