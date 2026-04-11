@@ -42,7 +42,8 @@ public class TGItemModelProvider extends ItemModelProvider {
             Map.entry("lamp_yellow", "lamp_inventory_yellow"),
             Map.entry("lamp_white", "lamp_inventory_white"),
             Map.entry("lantern_yellow", "lantern_inventory_yellow"),
-            Map.entry("lantern_white", "lantern_inventory_white")
+            Map.entry("lantern_white", "lantern_inventory_white"),
+            Map.entry("bioblob", "bioblob0")
     );
     private static final Map<String, TGDisplayTransform> BLOCK_ITEM_GUI_OVERRIDES = Map.of(
             "metal_ladder", LADDER_GUI_TRANSFORM,

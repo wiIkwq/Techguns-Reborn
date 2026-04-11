@@ -1,6 +1,7 @@
 package com.wiik_wq.techguns.data;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.block.TGBioblobBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetTopBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
@@ -29,6 +30,7 @@ public class TGBlockStateProvider extends BlockStateProvider {
     @Override
     protected void registerStatesAndModels() {
         TGBlockCatalog.CUBE_MODEL_BLOCKS.forEach(this::simpleExistingModel);
+        bioblobModel();
         TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.forEach(this::simpleGeneratedCube);
         TGBlockCatalog.HORIZONTAL_MODEL_BLOCKS.forEach(id -> horizontalExistingModel(id, TGBlockCatalog.HORIZONTAL_MODEL_NAMES.get(id)));
         TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> directionalExistingModel(id, TGBlockCatalog.DIRECTIONAL_MODEL_NAMES.get(id)));
@@ -66,11 +68,24 @@ public class TGBlockStateProvider extends BlockStateProvider {
         RegistryObject<Block> block = entry(id);
         ModelFile model = models().getExistingFile(modLoc("block/" + modelName));
         getVariantBuilder(block.get()).forAllStates(state -> {
-            Direction direction = state.getValue(com.wiik_wq.techguns.common.block.TGDirectionalBlock.FACING);
+            Direction direction = state.getValue(com.wiik_wq.techguns.common.block.TGAttachedDirectionalBlock.FACING);
             return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationX(rotationX(direction))
                     .rotationY(rotationY(direction))
+                    .build();
+        });
+    }
+
+    private void bioblobModel() {
+        RegistryObject<Block> block = entry(TGBlockCatalog.BIOBLOB);
+        getVariantBuilder(block.get()).forAllStates(state -> {
+            Direction direction = state.getValue(TGBioblobBlock.FACING);
+            int size = state.getValue(TGBioblobBlock.SIZE);
+            return ConfiguredModel.builder()
+                    .modelFile(models().getExistingFile(modLoc("block/bioblob" + size)))
+                    .rotationX(bioblobRotationX(direction))
+                    .rotationY(bioblobRotationY(direction))
                     .build();
         });
     }
@@ -295,6 +310,24 @@ public class TGBlockStateProvider extends BlockStateProvider {
     }
 
     private int rotationForLegacyLadder(Direction direction) {
+        return switch (direction) {
+            case NORTH -> 180;
+            case EAST -> 270;
+            case SOUTH -> 0;
+            case WEST -> 90;
+            case UP, DOWN -> 0;
+        };
+    }
+
+    private int bioblobRotationX(Direction direction) {
+        return switch (direction) {
+            case UP -> 180;
+            case NORTH, SOUTH, WEST, EAST -> 90;
+            case DOWN -> 0;
+        };
+    }
+
+    private int bioblobRotationY(Direction direction) {
         return switch (direction) {
             case NORTH -> 180;
             case EAST -> 270;

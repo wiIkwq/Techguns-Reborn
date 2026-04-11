@@ -1,9 +1,10 @@
 package com.wiik_wq.techguns.common.registration;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.block.TGAttachedDirectionalBlock;
+import com.wiik_wq.techguns.common.block.TGBioblobBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetTopBlock;
-import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGHorizontalBlock;
 import com.wiik_wq.techguns.common.block.TGLadderBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
@@ -57,11 +58,12 @@ public final class TGBlocks {
                 SPAWNER_MARKER_BLOCKS.contains(id)
                         ? new TGSpawnerMarkerBlock(defaultProps(id).noOcclusion())
                         : new Block(defaultProps(id))));
+        register(TGBlockCatalog.BIOBLOB, () -> new TGBioblobBlock(defaultProps(TGBlockCatalog.BIOBLOB)));
         TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.keySet().stream()
                 .filter(id -> !SPECIAL_MACHINE_BLOCKS.contains(id))
                 .forEach(id -> register(id, () -> new Block(defaultProps(id))));
         TGBlockCatalog.HORIZONTAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGHorizontalBlock(defaultProps(id))));
-        TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGDirectionalBlock(defaultProps(id))));
+        TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGAttachedDirectionalBlock(defaultProps(id))));
         TGBlockCatalog.ROTATED_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
         TGBlockCatalog.MILITARY_CRATE_TEXTURES.keySet().forEach(id -> register(id, () -> new TGMilitaryCrateBlock(defaultProps(id))));
         TGBlockCatalog.CAMONET_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetBlock(defaultProps(id).noOcclusion())));

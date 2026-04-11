@@ -9,7 +9,6 @@ import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelAmmoPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelChemLab;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelMetalPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelTurretBase;
-import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
 import com.wiik_wq.techguns.common.blockentity.TGMachineBlockEntity;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -18,6 +17,7 @@ import net.minecraft.client.renderer.blockentity.BlockEntityRendererProvider;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Map;
@@ -78,7 +78,7 @@ public class TGMachineBlockEntityRenderer implements BlockEntityRenderer<TGMachi
     }
 
     private static void applyTurretTransform(PoseStack poseStack, BlockState state) {
-        Direction facing = state.getValue(TGDirectionalBlock.FACING);
+        Direction facing = state.getValue(DirectionalBlock.FACING);
         switch (facing) {
             case DOWN -> {
                 poseStack.translate(0.5D, -0.5D, 0.5D);

@@ -7,6 +7,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.BaseEntityBlock;
+import net.minecraft.world.level.block.DirectionalBlock;
 import net.minecraft.world.level.block.RenderShape;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockBehaviour;
@@ -18,19 +19,19 @@ public class TGTurretBlock extends BaseEntityBlock {
 
     public TGTurretBlock(BlockBehaviour.Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(TGDirectionalBlock.FACING, Direction.UP));
+        this.registerDefaultState(this.stateDefinition.any().setValue(DirectionalBlock.FACING, Direction.UP));
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<net.minecraft.world.level.block.Block, BlockState> builder) {
-        builder.add(TGDirectionalBlock.FACING);
+        builder.add(DirectionalBlock.FACING);
     }
 
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         Direction clickedFace = context.getClickedFace();
         Direction facing = clickedFace == Direction.DOWN ? Direction.DOWN : Direction.UP;
-        return this.defaultBlockState().setValue(TGDirectionalBlock.FACING, facing);
+        return this.defaultBlockState().setValue(DirectionalBlock.FACING, facing);
     }
 
     @Override

@@ -5,6 +5,8 @@ import java.util.Map;
 
 public final class TGBlockCatalog {
 
+    public static final String BIOBLOB = "bioblob";
+
     public static final Map<String, String> CUBE_MODEL_BLOCKS = Map.ofEntries(
             Map.entry("ore_copper", "ore_copper"),
             Map.entry("ore_tin", "ore_tin"),
@@ -72,8 +74,7 @@ public final class TGBlockCatalog {
             Map.entry("antiairmarker", "antiairmarker"),
             Map.entry("hole", "hole"),
             Map.entry("soldier_spawn", "soldier_spawn"),
-            Map.entry("sandbags", "sandbags_center"),
-            Map.entry("bioblob", "bioblob0")
+            Map.entry("sandbags", "sandbags_center")
     );
 
     public static final List<String> HORIZONTAL_MODEL_BLOCKS = List.of(
@@ -188,7 +189,8 @@ public final class TGBlockCatalog {
             Map.entry("lamp_yellow", 15),
             Map.entry("lamp_white", 15),
             Map.entry("lantern_yellow", 15),
-            Map.entry("lantern_white", 15)
+            Map.entry("lantern_white", 15),
+            Map.entry(BIOBLOB, 7)
     );
 
     public static final List<String> CUTOUT_BLOCKS = List.of(
