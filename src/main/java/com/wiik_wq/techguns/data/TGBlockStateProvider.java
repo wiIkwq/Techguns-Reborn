@@ -1,6 +1,8 @@
 package com.wiik_wq.techguns.data;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.block.TGCamoNetBlock;
+import com.wiik_wq.techguns.common.block.TGCamoNetTopBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
@@ -14,6 +16,9 @@ import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TGBlockStateProvider extends BlockStateProvider {
 
@@ -88,18 +93,25 @@ public class TGBlockStateProvider extends BlockStateProvider {
 
     private void camonetModel(String id, String textureName) {
         RegistryObject<Block> block = entry(id);
-        ModelFile model = models().withExistingParent(id, modLoc("block/camonet_full"))
-                .texture("1", modLoc("blocks/" + textureName))
-                .texture("particle", modLoc("blocks/" + textureName));
-        simpleBlock(block.get(), model);
+        ResourceLocation supportTexture = camonetSupportTexture(id);
+        ResourceLocation netTexture = modLoc("blocks/" + textureName);
+        ModelFile stick = camonetSubmodel(id + "_stick", "camonet_stick", supportTexture, netTexture);
+        ModelFile half = camonetSubmodel(id + "_half", "camonet_half", supportTexture, netTexture);
+        ModelFile full = camonetSubmodel(id + "_full", "camonet_full", supportTexture, netTexture);
+
+        getVariantBuilder(block.get()).forAllStates(state -> camonetModels(state, stick, half, full));
     }
 
     private void camonetTopModel(String id, String textureName) {
         RegistryObject<Block> block = entry(id);
-        ModelFile model = models().withExistingParent(id, modLoc("block/camonet_top_full"))
-                .texture("0", modLoc("blocks/" + textureName))
-                .texture("particle", modLoc("blocks/" + textureName));
-        simpleBlock(block.get(), model);
+        ResourceLocation netTexture = modLoc("blocks/" + textureName);
+        ModelFile center = camonetTopSubmodel(id + "_center", "camonet_top_center", netTexture);
+        ModelFile side = camonetTopSubmodel(id + "_side", "camonet_top_side", netTexture);
+        ModelFile corner = camonetTopSubmodel(id + "_corner", "camonet_top_corner", netTexture);
+        ModelFile side2 = camonetTopSubmodel(id + "_side2", "camonet_top_side2", netTexture);
+        ModelFile full = camonetTopSubmodel(id + "_full", "camonet_top_full", netTexture);
+
+        getVariantBuilder(block.get()).forAllStates(state -> camonetTopModels(state, center, side, corner, side2, full));
     }
 
     private void ladderModel(String id, String modelName) {
@@ -139,6 +151,121 @@ public class TGBlockStateProvider extends BlockStateProvider {
         builder.part().modelFile(side).rotationY(180).addModel().condition(TGLanternBlock.WEST, true);
         builder.part().modelFile(top).addModel().condition(TGLanternBlock.UP, true);
         builder.part().modelFile(top).rotationX(180).addModel().condition(TGLanternBlock.DOWN, true);
+    }
+
+    private ModelFile camonetSubmodel(String name, String parent, ResourceLocation supportTexture, ResourceLocation netTexture) {
+        return models().withExistingParent(name, modLoc("block/" + parent))
+                .texture("0", supportTexture)
+                .texture("1", netTexture)
+                .texture("particle", netTexture);
+    }
+
+    private ModelFile camonetTopSubmodel(String name, String parent, ResourceLocation netTexture) {
+        return models().withExistingParent(name, modLoc("block/" + parent))
+                .texture("0", netTexture)
+                .texture("particle", netTexture);
+    }
+
+    private ConfiguredModel[] camonetModels(net.minecraft.world.level.block.state.BlockState state, ModelFile stick, ModelFile half, ModelFile full) {
+        boolean north = state.getValue(TGCamoNetBlock.NORTH);
+        boolean east = state.getValue(TGCamoNetBlock.EAST);
+        boolean south = state.getValue(TGCamoNetBlock.SOUTH);
+        boolean west = state.getValue(TGCamoNetBlock.WEST);
+
+        List<ConfiguredModel> models = new ArrayList<>();
+
+        if (!north && !east && !south && !west) {
+            models.add(new ConfiguredModel(stick));
+            return models.toArray(ConfiguredModel[]::new);
+        }
+
+        if (!north && east && !south && west) {
+            models.add(new ConfiguredModel(full));
+            return models.toArray(ConfiguredModel[]::new);
+        }
+
+        if (north && !east && south && !west) {
+            models.add(new ConfiguredModel(full, 0, 270, true));
+            return models.toArray(ConfiguredModel[]::new);
+        }
+
+        models.add(new ConfiguredModel(stick));
+        if (north) {
+            models.add(new ConfiguredModel(half, 0, 270, true));
+        }
+        if (east) {
+            models.add(new ConfiguredModel(half));
+        }
+        if (south) {
+            models.add(new ConfiguredModel(half, 0, 90, true));
+        }
+        if (west) {
+            models.add(new ConfiguredModel(half, 0, 180, true));
+        }
+        return models.toArray(ConfiguredModel[]::new);
+    }
+
+    private ConfiguredModel[] camonetTopModels(net.minecraft.world.level.block.state.BlockState state, ModelFile center, ModelFile side, ModelFile corner, ModelFile side2, ModelFile full) {
+        boolean north = state.getValue(TGCamoNetTopBlock.NORTH);
+        boolean east = state.getValue(TGCamoNetTopBlock.EAST);
+        boolean south = state.getValue(TGCamoNetTopBlock.SOUTH);
+        boolean west = state.getValue(TGCamoNetTopBlock.WEST);
+
+        int connection = connectionIndex(north, east, south, west);
+        return switch (connection) {
+            case 0 -> models(center);
+            case 1 -> models(side, 180);
+            case 2 -> models(side, 90);
+            case 3 -> models(corner, 180);
+            case 4 -> models(side, 0);
+            case 5 -> new ConfiguredModel[]{new ConfiguredModel(side), new ConfiguredModel(side, 0, 180, true)};
+            case 6 -> models(corner, 90);
+            case 7 -> models(side2, 90);
+            case 8 -> models(side, 270);
+            case 9 -> models(corner, 270);
+            case 10 -> new ConfiguredModel[]{new ConfiguredModel(side, 0, 270, true), new ConfiguredModel(side, 0, 90, true)};
+            case 11 -> models(side2, 180);
+            case 12 -> models(corner, 0);
+            case 13 -> models(side2, 270);
+            case 14 -> models(side2, 0);
+            case 15 -> models(full);
+            default -> models(center);
+        };
+    }
+
+    private ConfiguredModel[] models(ModelFile model) {
+        return new ConfiguredModel[]{new ConfiguredModel(model)};
+    }
+
+    private ConfiguredModel[] models(ModelFile model, int rotationY) {
+        return new ConfiguredModel[]{new ConfiguredModel(model, 0, rotationY, true)};
+    }
+
+    private int connectionIndex(boolean north, boolean east, boolean south, boolean west) {
+        int index = 0;
+        if (north) {
+            index += 8;
+        }
+        if (east) {
+            index += 4;
+        }
+        if (south) {
+            index += 2;
+        }
+        if (west) {
+            index += 1;
+        }
+        return index;
+    }
+
+    private ResourceLocation camonetSupportTexture(String id) {
+        if (id.contains("desert")) {
+            return new ResourceLocation("minecraft", "block/acacia_planks");
+        }
+        if (id.contains("snow")) {
+            return new ResourceLocation("minecraft", "block/spruce_planks");
+        }
+        return new ResourceLocation("minecraft", "block/oak_planks");
     }
 
     private RegistryObject<Block> entry(String id) {

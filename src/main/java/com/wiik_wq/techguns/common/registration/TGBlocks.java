@@ -1,12 +1,15 @@
 package com.wiik_wq.techguns.common.registration;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.block.TGCamoNetBlock;
+import com.wiik_wq.techguns.common.block.TGCamoNetTopBlock;
 import com.wiik_wq.techguns.common.block.TGDirectionalBlock;
 import com.wiik_wq.techguns.common.block.TGHorizontalBlock;
 import com.wiik_wq.techguns.common.block.TGLadderBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
 import com.wiik_wq.techguns.common.block.TGSlimyLadderBlock;
+import com.wiik_wq.techguns.common.block.TGSpawnerMarkerBlock;
 import com.wiik_wq.techguns.common.block.TGTurretBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.item.TGSpecialRendererBlockItem;
@@ -43,9 +46,16 @@ public final class TGBlocks {
             "chem_lab",
             "turret_base"
     );
+    private static final Set<String> SPAWNER_MARKER_BLOCKS = Set.of(
+            "hole",
+            "soldier_spawn"
+    );
 
     static {
-        TGBlockCatalog.CUBE_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
+        TGBlockCatalog.CUBE_MODEL_BLOCKS.keySet().forEach(id -> register(id, () ->
+                SPAWNER_MARKER_BLOCKS.contains(id)
+                        ? new TGSpawnerMarkerBlock(defaultProps(id).noOcclusion())
+                        : new Block(defaultProps(id))));
         TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.keySet().stream()
                 .filter(id -> !SPECIAL_MACHINE_BLOCKS.contains(id))
                 .forEach(id -> register(id, () -> new Block(defaultProps(id))));
@@ -53,8 +63,8 @@ public final class TGBlocks {
         TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGDirectionalBlock(defaultProps(id))));
         TGBlockCatalog.ROTATED_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
         TGBlockCatalog.MILITARY_CRATE_TEXTURES.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).sound(SoundType.WOOD))));
-        TGBlockCatalog.CAMONET_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
-        TGBlockCatalog.CAMONET_TOP_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
+        TGBlockCatalog.CAMONET_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetBlock(defaultProps(id).noOcclusion())));
+        TGBlockCatalog.CAMONET_TOP_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetTopBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () ->
                 "slimyladder".equals(id)
                         ? new TGSlimyLadderBlock(defaultProps(id).noOcclusion().sound(SoundType.SLIME_BLOCK))

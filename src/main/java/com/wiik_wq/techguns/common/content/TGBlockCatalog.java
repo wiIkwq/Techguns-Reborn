@@ -192,6 +192,8 @@ public final class TGBlockCatalog {
     );
 
     public static final List<String> CUTOUT_BLOCKS = List.of(
+            "hole",
+            "soldier_spawn",
             "camonet_wood",
             "camonet_desert",
             "camonet_snow",
