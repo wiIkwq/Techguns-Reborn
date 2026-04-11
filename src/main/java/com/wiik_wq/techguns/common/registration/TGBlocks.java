@@ -8,6 +8,7 @@ import com.wiik_wq.techguns.common.block.TGHorizontalBlock;
 import com.wiik_wq.techguns.common.block.TGLadderBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
+import com.wiik_wq.techguns.common.block.TGMilitaryCrateBlock;
 import com.wiik_wq.techguns.common.block.TGSlimyLadderBlock;
 import com.wiik_wq.techguns.common.block.TGSpawnerMarkerBlock;
 import com.wiik_wq.techguns.common.block.TGTurretBlock;
@@ -62,7 +63,7 @@ public final class TGBlocks {
         TGBlockCatalog.HORIZONTAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGHorizontalBlock(defaultProps(id))));
         TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> register(id, () -> new TGDirectionalBlock(defaultProps(id))));
         TGBlockCatalog.ROTATED_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id))));
-        TGBlockCatalog.MILITARY_CRATE_TEXTURES.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).sound(SoundType.WOOD))));
+        TGBlockCatalog.MILITARY_CRATE_TEXTURES.keySet().forEach(id -> register(id, () -> new TGMilitaryCrateBlock(defaultProps(id))));
         TGBlockCatalog.CAMONET_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.CAMONET_TOP_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetTopBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () ->
