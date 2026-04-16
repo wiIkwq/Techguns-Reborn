@@ -227,7 +227,8 @@ public final class TGBlockCatalog {
             "hangar_door_down",
             "bunkerdoor",
             "fabricator_glass",
-            "reactionchamber_glass"
+            "reactionchamber_glass",
+            "oredrill_scaffold"
     );
 
     public static final Map<String, String> BLOCK_ITEM_TEXTURE_OVERRIDES = Map.ofEntries(
