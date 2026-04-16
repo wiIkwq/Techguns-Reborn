@@ -259,7 +259,6 @@ public class ModelChainsaw extends LegacyMultipartModel {
 	        this.shape87_24.render(scale);
 	        this.shape87_34.render(scale);
     	} else if(part==1) {
-	        //System.out.println("fireProgress: "+fireProgress);
 	        int i = Math.round(fireProgress*40f)% 2;
 	        if (i==0) {
 	        	this.blade1.render(scale);

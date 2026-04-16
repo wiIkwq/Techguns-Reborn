@@ -6,6 +6,7 @@ import java.util.Map;
 public final class TGBlockCatalog {
 
     public static final String BIOBLOB = "bioblob";
+    public static final String SLIMY_LADDER = "slimyladder";
 
     public static final Map<String, String> CUBE_MODEL_BLOCKS = Map.ofEntries(
             Map.entry("ore_copper", "ore_copper"),
@@ -149,7 +150,7 @@ public final class TGBlockCatalog {
             Map.entry("shiny_metal_ladder", "ladder_shiny"),
             Map.entry("rusty_metal_ladder", "ladder_rusty"),
             Map.entry("carbon_ladder", "ladder_carbon"),
-            Map.entry("slimyladder", "slimyladder")
+            Map.entry(SLIMY_LADDER, SLIMY_LADDER)
     );
 
     public static final Map<String, String> STATIC_MODEL_BLOCKS = Map.ofEntries(
@@ -206,9 +207,9 @@ public final class TGBlockCatalog {
             "shiny_metal_ladder",
             "rusty_metal_ladder",
             "carbon_ladder",
-            "slimyladder",
+            SLIMY_LADDER,
             "sandbags",
-            "bioblob",
+            BIOBLOB,
             "military_crate_ammo",
             "military_crate_gun",
             "military_crate_armor",

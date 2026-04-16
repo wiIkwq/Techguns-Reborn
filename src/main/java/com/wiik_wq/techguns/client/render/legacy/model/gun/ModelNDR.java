@@ -391,19 +391,10 @@ public class ModelNDR extends LegacyMultipartModel {
 	        this.shape58_2.render(scale);
 	        this.shape14_7.render(scale);
 	        this.shape1_5.render(scale);
-	        
-	        //
-	        //System.out.println("FireProgress= "+fireProgress);
-	        
 	        LegacyRenderHelper.enableBlendMode(RenderType.ALPHA);
 	        this.GLOW.render(scale);
 	        if (fireProgress > 0) {
-	        	
-	        	//GL11.glDisable(GL11.GL_CULL_FACE);
 	        	LegacyGlStateManager.disableCull();
-	        	//System.out.println("FireProgress= "+fireProgress);
-		  //      LegacyRenderHelper.enableAlphaBlend();
-		        //this.glowA1.offsetY = (float) (-6.0f + Math.sin(fireProgress*2.0*Math.PI));
 	
 		        GL11.glPushMatrix();
 		        double s = 0.90 + Math.sin(fireProgress*2.0*Math.PI)*0.1;
@@ -427,14 +418,10 @@ public class ModelNDR extends LegacyMultipartModel {
 		        this.glowA1.rotateAngleX = 25.0f*((float)LegacyMathUtil.D2R);
 		        
 		        GL11.glPopMatrix();
-		        
-		 //       LegacyRenderHelper.disableAlphaBlend();
-		        
-		        //GL11.glEnable(GL11.GL_CULL_FACE);
+
 		        LegacyGlStateManager.enableCull();
 	        }
 	        
 	        LegacyRenderHelper.disableBlendMode(RenderType.ALPHA);
-	        //
 	}
 }

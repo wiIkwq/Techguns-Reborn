@@ -10,7 +10,6 @@ import com.wiik_wq.techguns.common.block.TGLadderBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
 import com.wiik_wq.techguns.common.block.TGMilitaryCrateBlock;
-import com.wiik_wq.techguns.common.block.TGSlimyLadderBlock;
 import com.wiik_wq.techguns.common.block.TGSpawnerMarkerBlock;
 import com.wiik_wq.techguns.common.block.TGTurretBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
@@ -69,8 +68,8 @@ public final class TGBlocks {
         TGBlockCatalog.CAMONET_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.CAMONET_TOP_BLOCKS.keySet().forEach(id -> register(id, () -> new TGCamoNetTopBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LADDER_BLOCKS.keySet().forEach(id -> register(id, () ->
-                "slimyladder".equals(id)
-                        ? new TGSlimyLadderBlock(defaultProps(id).noOcclusion().sound(SoundType.SLIME_BLOCK))
+                TGBlockCatalog.SLIMY_LADDER.equals(id)
+                        ? new TGLadderBlock(defaultProps(id).noOcclusion().sound(SoundType.SLIME_BLOCK))
                         : new TGLadderBlock(defaultProps(id).noOcclusion().sound(SoundType.METAL))));
         TGBlockCatalog.STATIC_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LANTERN_BLOCKS.keySet().forEach(id -> register(id, () -> new TGLanternBlock(defaultProps(id).noOcclusion())));

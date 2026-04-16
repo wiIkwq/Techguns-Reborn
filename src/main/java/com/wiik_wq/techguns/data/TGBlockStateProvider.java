@@ -5,13 +5,16 @@ import com.wiik_wq.techguns.common.block.TGBioblobBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetTopBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
+import com.wiik_wq.techguns.common.block.TGAttachedDirectionalBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import net.minecraft.core.Direction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.LadderBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
@@ -68,7 +71,7 @@ public class TGBlockStateProvider extends BlockStateProvider {
         RegistryObject<Block> block = entry(id);
         ModelFile model = models().getExistingFile(modLoc("block/" + modelName));
         getVariantBuilder(block.get()).forAllStates(state -> {
-            Direction direction = state.getValue(com.wiik_wq.techguns.common.block.TGAttachedDirectionalBlock.FACING);
+            Direction direction = state.getValue(TGAttachedDirectionalBlock.FACING);
             return ConfiguredModel.builder()
                     .modelFile(model)
                     .rotationX(rotationX(direction))
@@ -133,11 +136,12 @@ public class TGBlockStateProvider extends BlockStateProvider {
         RegistryObject<Block> block = entry(id);
         ModelFile model = models().getExistingFile(modLoc("block/" + modelName));
         getVariantBuilder(block.get()).forAllStates(state -> {
-            Direction direction = state.getValue(net.minecraft.world.level.block.LadderBlock.FACING);
+            Direction direction = state.getValue(LadderBlock.FACING);
+            boolean slimyLadder = TGBlockCatalog.SLIMY_LADDER.equals(id);
             ConfiguredModel.Builder<?> builder = ConfiguredModel.builder()
                     .modelFile(model)
-                    .rotationY(rotationForLegacyLadder(direction));
-            if ("slimyladder".equals(id)) {
+                    .rotationY(slimyLadder ? rotationForLegacySlimyLadder(direction) : rotationForLegacyLadder(direction));
+            if (slimyLadder) {
                 builder.rotationX(90);
             }
             return builder.build();
@@ -181,7 +185,7 @@ public class TGBlockStateProvider extends BlockStateProvider {
                 .texture("particle", netTexture);
     }
 
-    private ConfiguredModel[] camonetModels(net.minecraft.world.level.block.state.BlockState state, ModelFile stick, ModelFile half, ModelFile full) {
+    private ConfiguredModel[] camonetModels(BlockState state, ModelFile stick, ModelFile half, ModelFile full) {
         boolean north = state.getValue(TGCamoNetBlock.NORTH);
         boolean east = state.getValue(TGCamoNetBlock.EAST);
         boolean south = state.getValue(TGCamoNetBlock.SOUTH);
@@ -220,7 +224,7 @@ public class TGBlockStateProvider extends BlockStateProvider {
         return models.toArray(ConfiguredModel[]::new);
     }
 
-    private ConfiguredModel[] camonetTopModels(net.minecraft.world.level.block.state.BlockState state, ModelFile center, ModelFile side, ModelFile corner, ModelFile side2, ModelFile full) {
+    private ConfiguredModel[] camonetTopModels(BlockState state, ModelFile center, ModelFile side, ModelFile corner, ModelFile side2, ModelFile full) {
         boolean north = state.getValue(TGCamoNetTopBlock.NORTH);
         boolean east = state.getValue(TGCamoNetTopBlock.EAST);
         boolean south = state.getValue(TGCamoNetTopBlock.SOUTH);
@@ -275,12 +279,16 @@ public class TGBlockStateProvider extends BlockStateProvider {
 
     private ResourceLocation camonetSupportTexture(String id) {
         if (id.contains("desert")) {
-            return new ResourceLocation("minecraft", "block/acacia_planks");
+            return minecraftBlockTexture("acacia_planks");
         }
         if (id.contains("snow")) {
-            return new ResourceLocation("minecraft", "block/spruce_planks");
+            return minecraftBlockTexture("spruce_planks");
         }
-        return new ResourceLocation("minecraft", "block/oak_planks");
+        return minecraftBlockTexture("oak_planks");
+    }
+
+    private ResourceLocation minecraftBlockTexture(String name) {
+        return ResourceLocation.fromNamespaceAndPath("minecraft", "block/" + name);
     }
 
     private RegistryObject<Block> entry(String id) {
@@ -315,6 +323,16 @@ public class TGBlockStateProvider extends BlockStateProvider {
             case EAST -> 270;
             case SOUTH -> 0;
             case WEST -> 90;
+            case UP, DOWN -> 0;
+        };
+    }
+
+    private int rotationForLegacySlimyLadder(Direction direction) {
+        return switch (direction) {
+            case NORTH -> 0;
+            case EAST -> 90;
+            case SOUTH -> 180;
+            case WEST -> 270;
             case UP, DOWN -> 0;
         };
     }

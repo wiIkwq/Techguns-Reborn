@@ -1,6 +1,7 @@
 package com.wiik_wq.techguns.data;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import com.wiik_wq.techguns.common.registration.TGFluids;
 import com.wiik_wq.techguns.common.registration.TGItems;
@@ -63,7 +64,7 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("door3x3_nether", List.of("item.techguns.item_door3x3_3")),
             Map.entry("hole", List.of("block.techguns.tg_spawner.0")),
             Map.entry("soldier_spawn", List.of("block.techguns.tg_spawner.1")),
-            Map.entry("bioblob", List.of("block.techguns.bioblob.0")),
+            Map.entry(TGBlockCatalog.BIOBLOB, List.of("block.techguns.bioblob.0")),
             Map.entry("bugnest_sand", List.of("block.techguns.sand_hard.0")),
             Map.entry("bugnest_eggs", List.of("block.techguns.slimy.0")),
             Map.entry("military_crate_ammo", List.of("block.techguns.military_crate.0")),
@@ -104,7 +105,7 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("interiormarker_east", List.of("block.techguns.debugblock.2")),
             Map.entry("interiormarker_south", List.of("block.techguns.debugblock.2")),
             Map.entry("interiormarker_west", List.of("block.techguns.debugblock.2")),
-            Map.entry("slimyladder", List.of("block.techguns.slimyladder.2")),
+            Map.entry(TGBlockCatalog.SLIMY_LADDER, List.of("block.techguns.slimyladder.2")),
             Map.entry("oredrill_frame", List.of("block.techguns.oredrill.0")),
             Map.entry("oredrill_scaffold", List.of("block.techguns.oredrill.1")),
             Map.entry("oredrill_rod", List.of("block.techguns.oredrill.2")),
