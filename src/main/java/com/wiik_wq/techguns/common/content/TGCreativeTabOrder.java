@@ -107,7 +107,7 @@ public final class TGCreativeTabOrder {
             "ore_titanium",
             "ore_uranium",
             TGBlockCatalog.BIOBLOB,
-            "sandbags",
+            TGBlockCatalog.SANDBAGS,
             "lamp_yellow",
             "lamp_white",
             "lantern_yellow",

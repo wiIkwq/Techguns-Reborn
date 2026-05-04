@@ -10,6 +10,7 @@ import com.wiik_wq.techguns.common.block.TGLadderBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGMachineBlock;
 import com.wiik_wq.techguns.common.block.TGMilitaryCrateBlock;
+import com.wiik_wq.techguns.common.block.TGSandbagsBlock;
 import com.wiik_wq.techguns.common.block.TGSpawnerMarkerBlock;
 import com.wiik_wq.techguns.common.block.TGTurretBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
@@ -58,6 +59,7 @@ public final class TGBlocks {
                         ? new TGSpawnerMarkerBlock(defaultProps(id).noOcclusion())
                         : new Block(defaultProps(id))));
         register(TGBlockCatalog.BIOBLOB, () -> new TGBioblobBlock(defaultProps(TGBlockCatalog.BIOBLOB)));
+        register(TGBlockCatalog.SANDBAGS, () -> new TGSandbagsBlock(defaultProps(TGBlockCatalog.SANDBAGS).noOcclusion().sound(SoundType.WOOL).strength(3.0F, 15.0F)));
         TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.keySet().stream()
                 .filter(id -> !SPECIAL_MACHINE_BLOCKS.contains(id))
                 .forEach(id -> register(id, () -> new Block(defaultProps(id))));

@@ -38,7 +38,7 @@ public class TGItemModelProvider extends ItemModelProvider {
             Map.entry("camonet_top_snow", "camonet_top_inventory"),
             Map.entry("armor_bench", "upgrade_bench"),
             Map.entry("charging_station", "charging_station"),
-            Map.entry("sandbags", "sandbags_inventory"),
+            Map.entry(TGBlockCatalog.SANDBAGS, "sandbags_inventory"),
             Map.entry("lamp_yellow", "lamp_inventory_yellow"),
             Map.entry("lamp_white", "lamp_inventory_white"),
             Map.entry("lantern_yellow", "lantern_inventory_yellow"),
@@ -52,7 +52,7 @@ public class TGItemModelProvider extends ItemModelProvider {
             "carbon_ladder", LADDER_GUI_TRANSFORM,
             TGBlockCatalog.SLIMY_LADDER, new TGDisplayTransform(90F, 0F, 0F, 0.0F, 0.0F, 0.0F, 0.9F, 0.9F, 0.9F),
             "charging_station", new TGDisplayTransform(30.0F, 45.0F, 0.0F, 6.9F, 12.5F, 0.0F, 0.6F, 0.6F, 0.6F),
-            "sandbags", new TGDisplayTransform(28.0F, 225.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.72F, 0.72F, 0.72F)
+            TGBlockCatalog.SANDBAGS, new TGDisplayTransform(28.0F, 225.0F, 0.0F, 0.0F, 0.0F, 0.0F, 0.72F, 0.72F, 0.72F)
     );
     private static final Set<String> SPECIAL_RENDER_BLOCK_ITEMS = Set.of(
             "ammo_press",

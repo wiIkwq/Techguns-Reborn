@@ -6,6 +6,7 @@ import com.wiik_wq.techguns.common.block.TGCamoNetBlock;
 import com.wiik_wq.techguns.common.block.TGCamoNetTopBlock;
 import com.wiik_wq.techguns.common.block.TGLanternBlock;
 import com.wiik_wq.techguns.common.block.TGAttachedDirectionalBlock;
+import com.wiik_wq.techguns.common.block.TGSandbagsBlock;
 import com.wiik_wq.techguns.common.content.TGBlockCatalog;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import net.minecraft.core.Direction;
@@ -34,6 +35,7 @@ public class TGBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         TGBlockCatalog.CUBE_MODEL_BLOCKS.forEach(this::simpleExistingModel);
         bioblobModel();
+        sandbagsModel();
         TGBlockCatalog.GENERATED_CUBE_ALL_BLOCKS.forEach(this::simpleGeneratedCube);
         TGBlockCatalog.HORIZONTAL_MODEL_BLOCKS.forEach(id -> horizontalExistingModel(id, TGBlockCatalog.HORIZONTAL_MODEL_NAMES.get(id)));
         TGBlockCatalog.DIRECTIONAL_MODEL_BLOCKS.forEach(id -> directionalExistingModel(id, TGBlockCatalog.DIRECTIONAL_MODEL_NAMES.get(id)));
@@ -97,6 +99,24 @@ public class TGBlockStateProvider extends BlockStateProvider {
         RegistryObject<Block> block = entry(id);
         ModelFile model = models().getExistingFile(modLoc("block/" + modelName));
         getVariantBuilder(block.get()).partialState().setModels(ConfiguredModel.builder().modelFile(model).rotationY(yRot).build());
+    }
+
+    private void sandbagsModel() {
+        RegistryObject<Block> block = entry(TGBlockCatalog.SANDBAGS);
+        ModelFile center = models().getExistingFile(modLoc("block/sandbags_center"));
+        ModelFile side = models().getExistingFile(modLoc("block/sandbags_side"));
+        ModelFile corner = models().getExistingFile(modLoc("block/sandbags_corner"));
+
+        var builder = getMultipartBuilder(block.get());
+        builder.part().modelFile(center).addModel();
+        builder.part().modelFile(side).uvLock(true).addModel().condition(TGSandbagsBlock.NORTH, true);
+        builder.part().modelFile(side).rotationY(90).uvLock(true).addModel().condition(TGSandbagsBlock.EAST, true);
+        builder.part().modelFile(side).rotationY(180).uvLock(true).addModel().condition(TGSandbagsBlock.SOUTH, true);
+        builder.part().modelFile(side).rotationY(270).uvLock(true).addModel().condition(TGSandbagsBlock.WEST, true);
+        builder.part().modelFile(corner).uvLock(true).addModel().condition(TGSandbagsBlock.CORNER_NE, true);
+        builder.part().modelFile(corner).rotationY(90).uvLock(true).addModel().condition(TGSandbagsBlock.CORNER_ES, true);
+        builder.part().modelFile(corner).rotationY(180).uvLock(true).addModel().condition(TGSandbagsBlock.CORNER_SW, true);
+        builder.part().modelFile(corner).rotationY(270).uvLock(true).addModel().condition(TGSandbagsBlock.CORNER_WN, true);
     }
 
     private void militaryCrateModel(String id, java.util.List<String> textures) {

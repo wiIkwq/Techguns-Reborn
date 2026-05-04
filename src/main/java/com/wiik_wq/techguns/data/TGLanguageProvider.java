@@ -46,7 +46,7 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("lamp_white", List.of("block.techguns.lamp0.6")),
             Map.entry("lantern_yellow", List.of("block.techguns.lamp0.12")),
             Map.entry("lantern_white", List.of("block.techguns.lamp0.13")),
-            Map.entry("sandbags", List.of("block.techguns.sandbags")),
+            Map.entry(TGBlockCatalog.SANDBAGS, List.of("block.techguns.sandbags")),
             Map.entry("metal_ladder", List.of("block.techguns.ladder0.8")),
             Map.entry("shiny_metal_ladder", List.of("block.techguns.ladder0.9")),
             Map.entry("rusty_metal_ladder", List.of("block.techguns.ladder0.10")),
