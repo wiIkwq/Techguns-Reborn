@@ -1,12 +1,15 @@
 package com.wiik_wq.techguns;
 
 import com.wiik_wq.techguns.client.TGRenderLayers;
+import com.wiik_wq.techguns.client.gui.screen.TGPlayerInventoryScreen;
 import com.wiik_wq.techguns.client.render.blockentity.TGMachineBlockEntityRenderer;
+import com.wiik_wq.techguns.common.network.TGNetwork;
 import com.wiik_wq.techguns.common.registration.TGBlockEntities;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
 import com.wiik_wq.techguns.common.registration.TGCreativeTabs;
 import com.wiik_wq.techguns.common.registration.TGFluids;
 import com.wiik_wq.techguns.common.registration.TGItems;
+import com.wiik_wq.techguns.common.registration.TGMenus;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.server.ServerStartingEvent;
@@ -17,6 +20,7 @@ import net.minecraftforge.client.event.EntityRenderersEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraft.client.gui.screens.MenuScreens;
 
 @Mod(TechgunsReborn.MODID)
 public class TechgunsReborn {
@@ -29,12 +33,14 @@ public class TechgunsReborn {
         TGBlocks.register(modEventBus);
         TGFluids.register(modEventBus);
         TGBlockEntities.register(modEventBus);
+        TGMenus.register(modEventBus);
         TGCreativeTabs.register(modEventBus);
         modEventBus.addListener(this::commonSetup);
         MinecraftForge.EVENT_BUS.register(this);
     }
 
     private void commonSetup(final FMLCommonSetupEvent event) {
+        event.enqueueWork(TGNetwork::register);
     }
 
     @SubscribeEvent
@@ -48,6 +54,7 @@ public class TechgunsReborn {
         public static void onClientSetup(FMLClientSetupEvent event)
         {
             event.enqueueWork(TGRenderLayers::register);
+            event.enqueueWork(() -> MenuScreens.register(TGMenus.PLAYER_INVENTORY.get(), TGPlayerInventoryScreen::new));
         }
 
         @SubscribeEvent

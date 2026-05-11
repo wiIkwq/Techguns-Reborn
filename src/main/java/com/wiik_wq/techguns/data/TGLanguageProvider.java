@@ -147,6 +147,7 @@ public class TGLanguageProvider extends LanguageProvider {
         Map<String, String> translations = mergeLegacyTranslations(rawTranslations);
 
         translations.put("itemGroup.techguns", translations.getOrDefault("itemGroup.techguns", "Techguns"));
+        translations.put("container.techguns.player_inventory", translations.getOrDefault("container.techguns.player_inventory", "Techguns Inventory"));
 
         TGBlocks.all().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
         TGFluids.allBlocks().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));

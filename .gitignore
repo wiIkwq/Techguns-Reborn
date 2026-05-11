@@ -123,7 +123,6 @@ run/
 /build/
 /run/
 /run-data/
-/techguns_old/
 /.gitignore
 /src/test/
 /src/generated/
