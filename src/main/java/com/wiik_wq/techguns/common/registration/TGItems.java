@@ -1,6 +1,7 @@
 package com.wiik_wq.techguns.common.registration;
 
 import com.wiik_wq.techguns.TechgunsReborn;
+import com.wiik_wq.techguns.common.config.TGConfig;
 import com.wiik_wq.techguns.common.content.TGItemCatalog;
 import com.wiik_wq.techguns.common.item.TGArmorItem;
 import com.wiik_wq.techguns.common.item.TGGunItem;
@@ -38,7 +39,7 @@ public final class TGItems {
     public static final Map<String, ItemEntry> ENTRIES = new LinkedHashMap<>();
 
     static {
-        TGItemCatalog.SIMPLE_ITEMS.forEach(id -> register(id, ItemStyle.GENERATED,
+        TGItemCatalog.SIMPLE_ITEMS.stream().filter(TGConfig::shouldRegisterItem).forEach(id -> register(id, ItemStyle.GENERATED,
                 () -> TGItemCatalog.usesSpecialItemRenderer(id) ? new TGSpecialRendererItem(defaultProps()) : new Item(defaultProps())));
         TGItemCatalog.GUN_ITEMS.forEach(id -> register(id, ItemStyle.GUN, () -> new TGGunItem(singleStackProps())));
         TGItemCatalog.HANDHELD_ITEMS.forEach(id -> register(id, ItemStyle.HANDHELD, () -> new SwordItem(Tiers.IRON, 3, -2.4F, singleStackProps())));

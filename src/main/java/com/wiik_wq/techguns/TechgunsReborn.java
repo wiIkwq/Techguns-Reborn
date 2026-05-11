@@ -3,6 +3,7 @@ package com.wiik_wq.techguns;
 import com.wiik_wq.techguns.client.TGRenderLayers;
 import com.wiik_wq.techguns.client.gui.screen.TGPlayerInventoryScreen;
 import com.wiik_wq.techguns.client.render.blockentity.TGMachineBlockEntityRenderer;
+import com.wiik_wq.techguns.common.config.TGConfig;
 import com.wiik_wq.techguns.common.network.TGNetwork;
 import com.wiik_wq.techguns.common.registration.TGBlockEntities;
 import com.wiik_wq.techguns.common.registration.TGBlocks;
@@ -29,6 +30,7 @@ public class TechgunsReborn {
 
     public TechgunsReborn() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        TGConfig.register();
         TGItems.register(modEventBus);
         TGBlocks.register(modEventBus);
         TGFluids.register(modEventBus);
