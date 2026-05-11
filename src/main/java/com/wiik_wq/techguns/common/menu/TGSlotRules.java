@@ -41,7 +41,7 @@ final class TGSlotRules {
             case BACK -> matches(stack, BACK_IDS);
             case FACE -> matches(stack, FACE_IDS);
             case HAND -> matches(stack, HAND_IDS);
-            case HEAL -> matches(stack, HEAL_IDS) || stack.getItem().isEdible();
+            case HEAL -> matches(stack, HEAL_IDS);
         };
     }
 
