@@ -1,5 +1,23 @@
 # Changelog
 
+## 0.1.0-alpha.3
+
+Third public alpha update for Minecraft 1.20.1.
+
+Highlights:
+- added the first Techguns survival inventory foundation, including custom slots, tab switching, networking, and synced player data
+- added auto-feeder support for the Techguns food slots
+- fixed Techguns inventory item drops on death and `keepInventory` handling
+- ported the initial legacy config structure to Forge 1.20.1
+- restored legacy-style weapon crosshairs and improved creative tab ordering
+- added legacy language keys and additional migrated fluids
+- improved visual parity for armor sets, rockets, shields, gauss rifle, grenade launcher, chainsaw, charging station, ladders, lanterns, camo netting, sandbags, crates, mining charges, slimy trail, spawner markers, ore drill scaffold, and machine renders
+
+Known limitations:
+- this release is still an alpha focused on visual parity and restored infrastructure
+- Techguns inventory behavior is functional but not yet feature-complete compared to 1.12.2
+- projectiles, gun logic, machine logic, doors, NPC systems, and advanced interactions are still incomplete
+
 ## 0.1.0-alpha.2
 
 Second public alpha update for Minecraft 1.20.1.
