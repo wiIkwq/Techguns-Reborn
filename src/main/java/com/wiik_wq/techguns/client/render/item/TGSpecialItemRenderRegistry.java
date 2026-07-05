@@ -65,6 +65,8 @@ import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelAmmoPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelChemLab;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelMetalPress;
 import com.wiik_wq.techguns.client.render.legacy.model.machine.ModelTurretBase;
+import com.wiik_wq.techguns.common.gun.TGGunDefinitions;
+import com.wiik_wq.techguns.common.gun.TGGunState;
 import com.wiik_wq.techguns.common.item.TGArmorCamoSupport;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.entity.ItemRenderer;
@@ -595,9 +597,11 @@ public final class TGSpecialItemRenderRegistry {
                 rotation.apply(poseStack, context);
                 poseStack.translate(baseTranslation[0], baseTranslation[1], baseTranslation[2]);
 
+                int ammoLeft = ammoLeft(stack);
+                float reloadProgress = reloadProgress(stack);
                 for (int part = 0; part < parts; part++) {
                     LegacyModelTexture.set(textures[Math.min(part, textures.length - 1)]);
-                    model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, LEGACY_SCALE, 100, 0.0F, context, part, 0.0F, 0.0F);
+                    model.render(null, 0.0F, 0.0F, 0.0F, 0.0F, 0.0F, LEGACY_SCALE, ammoLeft, reloadProgress, context, part, 0.0F, 0.0F);
                 }
                 poseStack.popPose();
             } finally {
@@ -802,5 +806,22 @@ public final class TGSpecialItemRenderRegistry {
             }
             return 0.0F;
         }
+    }
+
+    private static int ammoLeft(ItemStack stack) {
+        return TGGunDefinitions.forStack(stack)
+                .map(definition -> TGGunState.ammo(stack, definition))
+                .orElse(100);
+    }
+
+    private static float reloadProgress(ItemStack stack) {
+        return TGGunDefinitions.forStack(stack)
+                .map(definition -> {
+                    if (Minecraft.getInstance().level == null) {
+                        return 0.0F;
+                    }
+                    return TGGunState.reloadProgress(stack, Minecraft.getInstance().level.getGameTime());
+                })
+                .orElse(0.0F);
     }
 }

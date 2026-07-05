@@ -41,7 +41,7 @@ public final class TGItems {
     static {
         TGItemCatalog.SIMPLE_ITEMS.stream().filter(TGConfig::shouldRegisterItem).forEach(id -> register(id, ItemStyle.GENERATED,
                 () -> TGItemCatalog.usesSpecialItemRenderer(id) ? new TGSpecialRendererItem(defaultProps()) : new Item(defaultProps())));
-        TGItemCatalog.GUN_ITEMS.forEach(id -> register(id, ItemStyle.GUN, () -> new TGGunItem(singleStackProps())));
+        TGItemCatalog.GUN_ITEMS.forEach(id -> register(id, ItemStyle.GUN, () -> new TGGunItem(id, singleStackProps())));
         TGItemCatalog.HANDHELD_ITEMS.forEach(id -> register(id, ItemStyle.HANDHELD, () -> new SwordItem(Tiers.IRON, 3, -2.4F, singleStackProps())));
         TGItemCatalog.SHIELD_ITEMS.forEach(id -> register(id, ItemStyle.SHIELD, () -> new TGShieldItem(singleStackProps().durability(512))));
         TGItemCatalog.ARMOR_ITEMS.forEach(TGItems::registerArmor);

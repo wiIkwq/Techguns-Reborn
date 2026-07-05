@@ -133,6 +133,14 @@ public class TGLanguageProvider extends LanguageProvider {
             Map.entry("concrete_brown_light_stairs", List.of("block.techguns.stairs_concrete.15")),
             Map.entry("concrete_grey_dark_stairs", List.of("block.techguns.stairs_concrete.7"))
     );
+    private static final Map<String, Map<String, String>> TRANSLATION_OVERRIDES_BY_LOCALE = Map.of(
+            "ru_ru", Map.ofEntries(
+                    Map.entry("block.techguns.container_green", "Зелёный контейнер"),
+                    Map.entry("block.techguns.concrete_brown_light_stairs", "Железобетонные ступеньки (светлые)"),
+                    Map.entry("block.techguns.concrete_grey_dark_stairs", "Железобетонные ступеньки (тёмные)"),
+                    Map.entry("block.techguns.concrete_brown_pipes", "Железобетон в стиле труб")
+            )
+    );
 
     private final String locale;
 
@@ -148,6 +156,11 @@ public class TGLanguageProvider extends LanguageProvider {
 
         translations.put("itemGroup.techguns", translations.getOrDefault("itemGroup.techguns", "Techguns"));
         translations.put("container.techguns.player_inventory", translations.getOrDefault("container.techguns.player_inventory", "Techguns Inventory"));
+        translations.put("key.categories.techguns", translations.getOrDefault("key.categories.techguns", "Techguns"));
+        translations.put("key.techguns.reload", translations.getOrDefault("key.techguns.reload", "Reload"));
+        translations.put("tooltip.techguns.ammo", translations.getOrDefault("tooltip.techguns.ammo", "Ammo: %s / %s"));
+        translations.put("tooltip.techguns.ammo_variant", translations.getOrDefault("tooltip.techguns.ammo_variant", "Ammo type: %s"));
+        applyTranslationOverrides(translations);
 
         TGBlocks.all().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
         TGFluids.allBlocks().forEach(entry -> translations.put(blockKey(entry.id()), resolveBlockTranslation(translations, entry.id())));
@@ -245,7 +258,43 @@ public class TGLanguageProvider extends LanguageProvider {
             }
         }
 
+        String variant = resolveBuildingVariantTranslation(translations, id);
+        if (variant != null) {
+            return variant;
+        }
+
         return humanize(id);
+    }
+
+    private void applyTranslationOverrides(Map<String, String> translations) {
+        Map<String, String> overrides = TRANSLATION_OVERRIDES_BY_LOCALE.get(locale);
+        if (overrides != null) {
+            translations.putAll(overrides);
+        }
+    }
+
+    private String resolveBuildingVariantTranslation(Map<String, String> translations, String id) {
+        String base = TGBlockCatalog.buildingVariantBase(id);
+        if (base == null) {
+            return null;
+        }
+
+        String baseName = resolveBlockTranslation(translations, base);
+        if (TGBlockCatalog.STAIRS.containsKey(id)) {
+            return variantTranslation(baseName, "Stairs", "ступеньки", "Stufen");
+        }
+        if (TGBlockCatalog.SLABS.containsKey(id)) {
+            return variantTranslation(baseName, "Slab", "плита", "Platte");
+        }
+        return variantTranslation(baseName, "Wall", "ограда", "Mauer");
+    }
+
+    private String variantTranslation(String baseName, String englishSuffix, String russianSuffix, String germanSuffix) {
+        return switch (locale) {
+            case "ru_ru" -> baseName + " (" + russianSuffix + ")";
+            case "de_de" -> baseName + " " + germanSuffix;
+            default -> baseName + " " + englishSuffix;
+        };
     }
 
     private String itemKey(String id) {

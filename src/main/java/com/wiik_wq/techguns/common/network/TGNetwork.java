@@ -41,6 +41,16 @@ public final class TGNetwork {
                 .decoder(SyncTGPlayerDataPacket::decode)
                 .consumerMainThread(SyncTGPlayerDataPacket::handle)
                 .add();
+        CHANNEL.messageBuilder(TGGunFirePacket.class, nextId(), NetworkDirection.PLAY_TO_SERVER)
+                .encoder(TGGunFirePacket::encode)
+                .decoder(TGGunFirePacket::decode)
+                .consumerMainThread(TGGunFirePacket::handle)
+                .add();
+        CHANNEL.messageBuilder(TGGunReloadPacket.class, nextId(), NetworkDirection.PLAY_TO_SERVER)
+                .encoder(TGGunReloadPacket::encode)
+                .decoder(TGGunReloadPacket::decode)
+                .consumerMainThread(TGGunReloadPacket::handle)
+                .add();
     }
 
     public static void openPlayerInventory() {
@@ -49,6 +59,14 @@ public final class TGNetwork {
 
     public static void togglePlayerOption(int id) {
         CHANNEL.sendToServer(new ToggleTGPlayerOptionPacket(id));
+    }
+
+    public static void fireGun(net.minecraft.world.InteractionHand hand) {
+        CHANNEL.sendToServer(new TGGunFirePacket(hand));
+    }
+
+    public static void reloadGun(net.minecraft.world.InteractionHand hand) {
+        CHANNEL.sendToServer(new TGGunReloadPacket(hand));
     }
 
     public static void syncPlayerData(Player player) {
