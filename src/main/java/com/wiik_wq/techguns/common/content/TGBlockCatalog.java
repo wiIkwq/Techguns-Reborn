@@ -1,5 +1,7 @@
 package com.wiik_wq.techguns.common.content;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -172,11 +174,32 @@ public final class TGBlockCatalog {
             Map.entry("turret_base", "basicmachine")
     );
 
-    public static final Map<String, String> STAIRS = Map.ofEntries(
-            Map.entry("panel_large_border_stairs", "panel_large_border"),
-            Map.entry("steelframe_dark_stairs", "steelframe_dark"),
-            Map.entry("concrete_grey_dark_stairs", "concrete_grey_dark"),
-            Map.entry("concrete_brown_light_stairs", "concrete_brown_light")
+    public static final List<String> BUILDING_VARIANT_BASES = List.of(
+            "panel_large_border",
+            "steelframe_blue",
+            "steelframe_dark",
+            "concrete_brown",
+            "concrete_brown_light",
+            "concrete_grey",
+            "concrete_grey_dark",
+            "concrete_brown_light_scaff",
+            "nethermetal_panel",
+            "nethermetal_grate1",
+            "nethermetal_grate2",
+            "nethermetal_grey_dark",
+            "nethermetal_grey",
+            "nethermetal_grey_tiles",
+            "nethermetal_border_red",
+            "nethermetal_plate_black",
+            "nethermetal_plate_red",
+            "nethermetal_border_lava"
+    );
+
+    public static final Map<String, String> STAIRS = buildingVariants("_stairs");
+    public static final Map<String, String> SLABS = buildingVariants("_slab");
+    public static final Map<String, String> WALLS = buildingVariants("_wall");
+    private static final Map<String, String> BUILDING_VARIANT_TEXTURES = Map.of(
+            "nethermetal_border_lava", "nethermetal_border_alpha"
     );
 
     public static final Map<String, Integer> LIGHT_BLOCKS = Map.ofEntries(
@@ -240,5 +263,27 @@ public final class TGBlockCatalog {
     );
 
     private TGBlockCatalog() {
+    }
+
+    public static String buildingVariantBase(String id) {
+        String base = STAIRS.get(id);
+        if (base != null) {
+            return base;
+        }
+        base = SLABS.get(id);
+        if (base != null) {
+            return base;
+        }
+        return WALLS.get(id);
+    }
+
+    public static String buildingVariantTexture(String base) {
+        return BUILDING_VARIANT_TEXTURES.getOrDefault(base, base);
+    }
+
+    private static Map<String, String> buildingVariants(String suffix) {
+        LinkedHashMap<String, String> variants = new LinkedHashMap<>();
+        BUILDING_VARIANT_BASES.forEach(base -> variants.put(base + suffix, base));
+        return Collections.unmodifiableMap(variants);
     }
 }

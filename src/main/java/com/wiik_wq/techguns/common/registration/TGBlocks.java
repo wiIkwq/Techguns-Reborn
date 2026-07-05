@@ -19,8 +19,10 @@ import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
 import net.minecraft.world.level.block.SoundType;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -76,6 +78,8 @@ public final class TGBlocks {
         TGBlockCatalog.STATIC_MODEL_BLOCKS.keySet().forEach(id -> register(id, () -> new Block(defaultProps(id).noOcclusion())));
         TGBlockCatalog.LANTERN_BLOCKS.keySet().forEach(id -> register(id, () -> new TGLanternBlock(defaultProps(id).noOcclusion())));
         TGBlockCatalog.STAIRS.keySet().forEach(id -> register(id, () -> new StairBlock(Blocks.STONE.defaultBlockState(), defaultProps(id))));
+        TGBlockCatalog.SLABS.keySet().forEach(id -> register(id, () -> new SlabBlock(defaultProps(id))));
+        TGBlockCatalog.WALLS.keySet().forEach(id -> register(id, () -> new WallBlock(defaultProps(id).noOcclusion())));
         register("ammo_press", () -> new TGMachineBlock(defaultProps("ammo_press").noOcclusion()));
         register("metal_press", () -> new TGMachineBlock(defaultProps("metal_press").noOcclusion()));
         register("chem_lab", () -> new TGMachineBlock(defaultProps("chem_lab").noOcclusion()));
@@ -112,7 +116,8 @@ public final class TGBlocks {
                 .mapColor(defaultMapColor(id))
                 .strength(2.0F, 6.0F);
 
-        Integer lightLevel = TGBlockCatalog.LIGHT_BLOCKS.get(id);
+        String lightSource = TGBlockCatalog.buildingVariantBase(id);
+        Integer lightLevel = TGBlockCatalog.LIGHT_BLOCKS.get(lightSource == null ? id : lightSource);
         if (lightLevel != null && lightLevel > 0) {
             properties = properties.lightLevel(state -> lightLevel);
         }

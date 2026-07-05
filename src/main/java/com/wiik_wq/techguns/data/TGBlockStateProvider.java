@@ -14,7 +14,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.LadderBlock;
+import net.minecraft.world.level.block.SlabBlock;
 import net.minecraft.world.level.block.StairBlock;
+import net.minecraft.world.level.block.WallBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -47,6 +49,8 @@ public class TGBlockStateProvider extends BlockStateProvider {
         TGBlockCatalog.STATIC_MODEL_BLOCKS.forEach(this::simpleExistingModel);
         TGBlockCatalog.LANTERN_BLOCKS.forEach(this::lanternModel);
         TGBlockCatalog.STAIRS.forEach(this::stairsModel);
+        TGBlockCatalog.SLABS.forEach(this::slabModel);
+        TGBlockCatalog.WALLS.forEach(this::wallModel);
     }
 
     private void simpleExistingModel(String id, String modelName) {
@@ -170,10 +174,22 @@ public class TGBlockStateProvider extends BlockStateProvider {
 
     private void stairsModel(String id, String textureName) {
         RegistryObject<Block> block = entry(id);
+        textureName = TGBlockCatalog.buildingVariantTexture(textureName);
         ModelFile stairs = models().stairs(id, modLoc("blocks/" + textureName), modLoc("blocks/" + textureName), modLoc("blocks/" + textureName));
         ModelFile stairsInner = models().stairsInner(id + "_inner", modLoc("blocks/" + textureName), modLoc("blocks/" + textureName), modLoc("blocks/" + textureName));
         ModelFile stairsOuter = models().stairsOuter(id + "_outer", modLoc("blocks/" + textureName), modLoc("blocks/" + textureName), modLoc("blocks/" + textureName));
         stairsBlock((StairBlock) block.get(), stairs, stairsInner, stairsOuter);
+    }
+
+    private void slabModel(String id, String textureName) {
+        RegistryObject<Block> block = entry(id);
+        ResourceLocation texture = modLoc("blocks/" + TGBlockCatalog.buildingVariantTexture(textureName));
+        slabBlock((SlabBlock) block.get(), modLoc("block/" + textureName), texture, texture, texture);
+    }
+
+    private void wallModel(String id, String textureName) {
+        RegistryObject<Block> block = entry(id);
+        wallBlock((WallBlock) block.get(), modLoc("blocks/" + TGBlockCatalog.buildingVariantTexture(textureName)));
     }
 
     private void lanternModel(String id, String modelName) {

@@ -95,6 +95,13 @@ public class TGItemModelProvider extends ItemModelProvider {
             return;
         }
 
+        String wallTexture = TGBlockCatalog.WALLS.get(id);
+        if (wallTexture != null) {
+            withExistingParent(id, mcLoc("block/wall_inventory"))
+                    .texture("wall", modLoc("blocks/" + TGBlockCatalog.buildingVariantTexture(wallTexture)));
+            return;
+        }
+
         String parent = blockItemParent(id);
         builder = withExistingParent(id, modLoc("block/" + parent));
         applyBlockItemTextures(builder, id, parent);

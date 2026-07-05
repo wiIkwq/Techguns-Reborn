@@ -19,11 +19,15 @@ public final class TGDataGenerators {
         DataGenerator generator = event.getGenerator();
         PackOutput output = generator.getPackOutput();
         ExistingFileHelper existingFileHelper = event.getExistingFileHelper();
+        var lookupProvider = event.getLookupProvider();
 
         generator.addProvider(event.includeClient(), new TGBlockStateProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new TGItemModelProvider(output, existingFileHelper));
         generator.addProvider(event.includeClient(), new TGLanguageProvider(output, "en_us"));
         generator.addProvider(event.includeClient(), new TGLanguageProvider(output, "ru_ru"));
         generator.addProvider(event.includeClient(), new TGLanguageProvider(output, "de_de"));
+        TGBlockTagsProvider blockTags = new TGBlockTagsProvider(output, lookupProvider, existingFileHelper);
+        generator.addProvider(event.includeServer(), blockTags);
+        generator.addProvider(event.includeServer(), new TGItemTagsProvider(output, lookupProvider, blockTags.contentsGetter(), existingFileHelper));
     }
 }
